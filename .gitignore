@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+packages/*/dist/
+demo/dist/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# pnpm
+.pnpm-store/
+
+# Vite
+demo/.vite/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.suo
+*.user
