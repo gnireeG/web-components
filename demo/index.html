@@ -5,7 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Webcomponents Demo</title>
   </head>
+  <script type="module" src="/src/main.ts"></script>
+  <link href="/src/style.css" rel="stylesheet">
   <body>
-    <script type="module" src="/src/main.ts"></script>
+    <div class="w-full bg-slate-200 px-3 py-2">Subnavigation for Demo purposes</div>
+    <scroll-navbar class="w-full bg-slate-700 text-white px-4 py-2">Test</scroll-navbar>
+
+    <div id="fill">
+
+    </div>
+    <script>
+      for(let i = 0; i < 100; i++){
+        const p = document.createElement('p')
+        p.innerText = 'Hallo Welt #' + i
+        fill.appendChild(p)
+      }
+    </script>
   </body>
 </html>

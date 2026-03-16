@@ -1,15 +1,18 @@
 {
   "name": "demo",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build"
   },
   "dependencies": {
-    "@gnireeg/scroll-navbar": "workspace:*"
+    "@gnireeg/scroll-navbar": "workspace:*",
+    "@tailwindcss/vite": "^4.2.1",
+    "tailwindcss": "^4.2.1"
   },
   "devDependencies": {
-    "vite": "^5.0.0",
-    "typescript": "^5.4.0"
+    "typescript": "^5.4.0",
+    "vite": "^5.0.0"
   }
 }

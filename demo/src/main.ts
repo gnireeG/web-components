@@ -1,3 +1,1 @@
-import test from '@gnireeg/scroll-navbar'
-
-test()
+import '@gnireeg/scroll-navbar'
