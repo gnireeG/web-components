@@ -200,12 +200,12 @@ export class FlyOut extends HTMLElement {
 
   private handleClickOutside = (e: PointerEvent) => {
     const target = e.target as Node;
-    const clickedTrigger = (target as Element).closest?.("fly-out-trigger") as HTMLElement;
+    const clickedToggle = (target as Element).closest?.("fly-out-toggle") as HTMLElement;
 
-    // Check if clicked trigger is for THIS fly-out
-    const clickedOnThisTrigger = clickedTrigger && clickedTrigger.getAttribute('name') === this.name;
+    // Check if clicked toggle is for THIS fly-out
+    const clickedOnThisToggle = clickedToggle && clickedToggle.getAttribute('name') === this.name;
 
-    if (!this.contains(target) && !clickedOnThisTrigger && this.show) {
+    if (!this.contains(target) && !clickedOnThisToggle && this.show) {
       this.close();
     }
   };
@@ -232,14 +232,14 @@ export class FlyOut extends HTMLElement {
   }
 }
 
-export class FlyOutTrigger extends HTMLElement {
+export class FlyOutToggle extends HTMLElement {
   private flyOutName: string | null = null;
 
   constructor() {
     super();
   }
 
-  private triggerFlyout() {
+  private toggleFlyout() {
     document.dispatchEvent(
       new CustomEvent("toggle-fly-out", {
         detail: { name: this.flyOutName },
@@ -262,12 +262,12 @@ export class FlyOutTrigger extends HTMLElement {
     }
     this.setAttribute("aria-expanded", "false");
 
-    this.addEventListener("click", this.triggerFlyout);
+    this.addEventListener("click", this.toggleFlyout);
     document.addEventListener("fly-out-state-changed", this.updateAriaExpanded);
   }
 
   disconnectedCallback() {
-    this.removeEventListener("click", this.triggerFlyout);
+    this.removeEventListener("click", this.toggleFlyout);
     document.removeEventListener(
       "fly-out-state-changed",
       this.updateAriaExpanded,
@@ -276,4 +276,4 @@ export class FlyOutTrigger extends HTMLElement {
 }
 
 customElements.define("fly-out", FlyOut);
-customElements.define("fly-out-trigger", FlyOutTrigger);
+customElements.define("fly-out-toggle", FlyOutToggle);
