@@ -20,13 +20,16 @@
     <div class="flex items-center justify-between">
       <h1 class="text-xl font-bold">Main Navigation</h1>
       <nav class="flex gap-6 items-center">
-        <a href="#" class="hover:text-slate-300">Home</a>
+        <router-link to="home" class="hover:text-slate-300">Home</router-link>
+        <router-link to="flyout" class="hover:text-slate-300">Flyout</router-link>
         <a href="#" class="hover:text-slate-300">About</a>
         <a href="#" class="hover:text-slate-300">Contact</a>
         <theme-toggle></theme-toggle>
       </nav>
     </div>
   </scroll-navbar>
+
+  <router-outlet></router-outlet>
 
   <div class="max-w-6xl mx-auto px-6 py-12">
     <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-8 transition-colors">Web Components Demo</h1>
