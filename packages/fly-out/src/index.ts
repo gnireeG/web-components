@@ -205,7 +205,11 @@ export class FlyOut extends HTMLElement {
     // Check if clicked toggle is for THIS fly-out
     const clickedOnThisToggle = clickedToggle && clickedToggle.getAttribute('name') === this.name;
 
-    if (!this.contains(target) && !clickedOnThisToggle && this.show) {
+    // If clicked on this toggle, let the toggle event handle it (don't close here)
+    if (clickedOnThisToggle) return;
+
+    // If clicked outside the fly-out, close it
+    if (!this.contains(target) && this.show) {
       this.close();
     }
   };
