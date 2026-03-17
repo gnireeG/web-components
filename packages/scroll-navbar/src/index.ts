@@ -1,9 +1,33 @@
+/**
+ * A navbar component that automatically hides when scrolling down and shows when scrolling up.
+ *
+ * Works with both window scroll and container scroll. The scroll container is automatically
+ * detected based on the element's offsetParent. If offsetParent is null or document.body,
+ * it will listen to window/document scroll events. Otherwise, it listens to the scroll
+ * events of the offsetParent element.
+ *
+ * @example
+ * <!-- Window scroll -->
+ * <scroll-navbar>
+ *   <nav>Your navbar content</nav>
+ * </scroll-navbar>
+ *
+ * @example
+ * <!-- Container scroll -->
+ * <div style="position: relative; overflow: auto; height: 500px;">
+ *   <scroll-navbar>
+ *     <nav>Your navbar content</nav>
+ *   </scroll-navbar>
+ *   <div>Scrollable content...</div>
+ * </div>
+ */
 export class ScrollNavbar extends HTMLElement {
   private lastScroll = 0;
   private navbarOffset = 0;
   private navbarHeight = 0;
   private ticking = false;
   private resizeTimeout: ReturnType<typeof setTimeout> | null = null;
+  private scrollParent: Element | Document = document;
 
   private boundHandleScroll: () => void;
   private boundHandleResize: () => void;
@@ -30,16 +54,21 @@ export class ScrollNavbar extends HTMLElement {
   }
 
   connectedCallback() {
+    this.scrollParent = this.offsetParent ?? document;
+    if(this.scrollParent === document.body){
+        this.scrollParent = document;
+    }
+
     requestAnimationFrame(() => {
       this.updateNavbarHeight();
     });
 
-    window.addEventListener('scroll', this.boundHandleScroll, { passive: true });
+    this.scrollParent.addEventListener('scroll', this.boundHandleScroll, { passive: true });
     window.addEventListener('resize', this.boundHandleResize);
   }
 
   disconnectedCallback() {
-    window.removeEventListener('scroll', this.boundHandleScroll);
+    this.scrollParent.removeEventListener('scroll', this.boundHandleScroll);
     window.removeEventListener('resize', this.boundHandleResize);
 
     if (this.resizeTimeout) {
@@ -56,10 +85,27 @@ export class ScrollNavbar extends HTMLElement {
     }
   }
 
+  private getScrollPosition(): number {
+    if (this.scrollParent === document) {
+      return window.scrollY || document.documentElement.scrollTop;
+    }
+    return (this.scrollParent as Element).scrollTop;
+  }
+
+  private isAtScrollTop(): boolean {
+    if (this.scrollParent === document) {
+      return this.getBoundingClientRect().top <= 0;
+    }
+
+    const parentRect = (this.scrollParent as Element).getBoundingClientRect();
+    const navbarRect = this.getBoundingClientRect();
+    return navbarRect.top <= parentRect.top;
+  }
+
   private updateNavbar() {
-    const currentScroll = window.scrollY;
+    const currentScroll = this.getScrollPosition();
     const scrollDiff = currentScroll - this.lastScroll;
-    const atTop = this.getBoundingClientRect().top <= 0;
+    const atTop = this.isAtScrollTop();
 
     if (currentScroll <= 0 || !atTop) {
         this.navbarOffset = 0;

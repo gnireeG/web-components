@@ -1,29 +1,37 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Webcomponents Demo</title>
-  </head>
-  <script type="module" src="/src/main.ts"></script>
-  <link href="/src/style.css" rel="stylesheet">
-  <body>
-    <div class="w-full bg-slate-200 px-3 py-2">Subnavigation for Demo purposes</div>
-    <scroll-navbar class="w-full bg-slate-700 text-white px-4 py-2">Test</scroll-navbar>
-    <fly-out-trigger name="test">Test</fly-out-trigger>
-    <fly-out name="test" position="bottom" lock-scroll class="p-4 bg-slate-300">
-      Hallo i bi es flyout
-      <input type="text" />
-    </fly-out>
-    <div id="fill">
 
-    </div>
-    <script>
-      for(let i = 0; i < 100; i++){
-        const p = document.createElement('p')
-        p.innerText = 'Hallo Welt #' + i
-        fill.appendChild(p)
-      }
-    </script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Webcomponents Demo</title>
+</head>
+<script type="module" src="/src/main.ts"></script>
+<link href="/src/style.css" rel="stylesheet" />
+
+<body>
+  <div class="w-full bg-slate-200 px-3 py-2">
+    Subnavigation for Demo purposes
+  </div>
+  <scroll-navbar name="scroll-navbar-relative-to-body" class="w-full bg-slate-700 text-white px-4 py-2 z-30">Test</scroll-navbar>
+  <div class="mt-16 relative h-48 overflow-y-auto z-0">
+    <div class="h-48">vorhär</div>
+    <scroll-navbar name="scroll-navbar-relative-to-relative-div" class="bg-red-500 z-20">I bi d navbar</scroll-navbar>
+    <div class="h-96 bg-red-200">Testing</div>
+  </div>
+  <fly-out-trigger name="test">Test</fly-out-trigger>
+  <fly-out name="test" position="bottom" lock-scroll class="p-4 bg-slate-300">
+    Hallo i bi es flyout
+    <input type="text" />
+  </fly-out>
+  <div id="fill"></div>
+  <script>
+    for (let i = 0; i < 100; i++) {
+      const p = document.createElement("p");
+      p.innerText = "Hallo Welt #" + i;
+      fill.appendChild(p);
+    }
+  </script>
+</body>
+
 </html>
