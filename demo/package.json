@@ -9,6 +9,7 @@
   "dependencies": {
     "@gnireeg/fly-out": "workspace:*",
     "@gnireeg/scroll-navbar": "workspace:*",
+    "@gnireeg/theme-toggle": "workspace:*",
     "@tailwindcss/vite": "^4.2.1",
     "tailwindcss": "^4.2.1"
   },

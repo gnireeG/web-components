@@ -9,53 +9,54 @@
 <script type="module" src="/src/main.ts"></script>
 <link href="/src/style.css" rel="stylesheet" />
 
-<body class="bg-slate-50">
+<body class="bg-slate-50 dark:bg-slate-900 transition-colors">
   <!-- Sticky Subnavigation -->
-  <div class="w-full bg-slate-200 px-6 py-3 text-sm font-medium text-slate-700 sticky top-0 z-20 shadow-sm">
+  <div class="w-full bg-slate-200 dark:bg-slate-800 px-6 py-3 text-sm font-medium text-slate-700 dark:text-slate-300 sticky top-0 z-20 shadow-sm transition-colors">
     Sticky Subnavigation (always visible)
   </div>
 
   <!-- Main Scroll Navbar (window scroll) -->
-  <scroll-navbar offset="44" class="w-full bg-slate-800 text-white px-6 py-4 z-10 shadow-md">
+  <scroll-navbar offset="44" class="w-full bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900 px-6 py-4 z-10 shadow-md transition-colors">
     <div class="flex items-center justify-between">
       <h1 class="text-xl font-bold">Main Navigation</h1>
-      <nav class="flex gap-6">
+      <nav class="flex gap-6 items-center">
         <a href="#" class="hover:text-slate-300">Home</a>
         <a href="#" class="hover:text-slate-300">About</a>
         <a href="#" class="hover:text-slate-300">Contact</a>
+        <theme-toggle></theme-toggle>
       </nav>
     </div>
   </scroll-navbar>
 
   <div class="max-w-6xl mx-auto px-6 py-12">
-    <h1 class="text-4xl font-bold text-slate-900 mb-8">Web Components Demo</h1>
+    <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-8 transition-colors">Web Components Demo</h1>
 
     <!-- Scroll Navbar Section -->
     <section class="mb-16">
-      <h2 class="text-2xl font-semibold text-slate-800 mb-4">1. Scroll Navbar</h2>
-      <p class="text-slate-600 mb-6">
+      <h2 class="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-4 transition-colors">1. Scroll Navbar</h2>
+      <p class="text-slate-600 dark:text-slate-400 mb-6 transition-colors">
         Try scrolling down - the navbar above hides smoothly. Scroll up to reveal it again.
         The navbar has a 40px offset to account for the sticky subnavigation above.
       </p>
 
       <!-- Container Scroll Example -->
-      <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-        <h3 class="text-lg font-semibold p-4 bg-slate-100 text-slate-700">
+      <div class="bg-white dark:bg-slate-800 rounded-lg shadow-lg overflow-hidden transition-colors">
+        <h3 class="text-lg font-semibold p-4 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-200 transition-colors">
           Scroll Navbar in Container
         </h3>
-        <div class="relative h-64 overflow-y-auto border-t border-slate-200">
-          <div class="p-4 bg-blue-50 h-32">
-            <p class="text-slate-600">Scroll down in this container to see the navbar hide...</p>
+        <div class="relative h-64 overflow-y-auto border-t border-slate-200 dark:border-slate-600 transition-colors">
+          <div class="p-4 bg-blue-50 dark:bg-blue-900/20 h-32 transition-colors">
+            <p class="text-slate-600 dark:text-slate-400 transition-colors">Scroll down in this container to see the navbar hide...</p>
           </div>
           <scroll-navbar class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-3 shadow-md">
             <div class="font-semibold">Container Navbar</div>
           </scroll-navbar>
           <div class="p-4 space-y-4">
-            <div class="h-24 bg-purple-100 rounded p-4">Content Block 1</div>
-            <div class="h-24 bg-purple-100 rounded p-4">Content Block 2</div>
-            <div class="h-24 bg-purple-100 rounded p-4">Content Block 3</div>
-            <div class="h-24 bg-purple-100 rounded p-4">Content Block 4</div>
-            <div class="h-24 bg-purple-100 rounded p-4">Content Block 5</div>
+            <div class="h-24 bg-purple-100 dark:bg-purple-900/30 rounded p-4 text-slate-700 dark:text-slate-300 transition-colors">Content Block 1</div>
+            <div class="h-24 bg-purple-100 dark:bg-purple-900/30 rounded p-4 text-slate-700 dark:text-slate-300 transition-colors">Content Block 2</div>
+            <div class="h-24 bg-purple-100 dark:bg-purple-900/30 rounded p-4 text-slate-700 dark:text-slate-300 transition-colors">Content Block 3</div>
+            <div class="h-24 bg-purple-100 dark:bg-purple-900/30 rounded p-4 text-slate-700 dark:text-slate-300 transition-colors">Content Block 4</div>
+            <div class="h-24 bg-purple-100 dark:bg-purple-900/30 rounded p-4 text-slate-700 dark:text-slate-300 transition-colors">Content Block 5</div>
           </div>
         </div>
       </div>
@@ -63,8 +64,8 @@
 
     <!-- Fly Out Section -->
     <section class="mb-16">
-      <h2 class="text-2xl font-semibold text-slate-800 mb-4">2. Fly Out Components</h2>
-      <p class="text-slate-600 mb-6">
+      <h2 class="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-4 transition-colors">2. Fly Out Components</h2>
+      <p class="text-slate-600 dark:text-slate-400 mb-6 transition-colors">
         Click the buttons below to open fly-outs from all four directions.
         Features include focus trapping, ESC to close, click outside to close, and scroll locking.
       </p>
@@ -94,11 +95,11 @@
 
     <!-- Content to enable scrolling -->
     <section>
-      <h2 class="text-2xl font-semibold text-slate-800 mb-4">Demo Content</h2>
+      <h2 class="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-4 transition-colors">Demo Content</h2>
       <div class="space-y-4">
-        <div class="bg-white rounded-lg shadow p-6">
-          <h3 class="font-semibold text-lg mb-2">Features</h3>
-          <ul class="list-disc list-inside text-slate-600 space-y-2">
+        <div class="bg-white dark:bg-slate-800 rounded-lg shadow p-6 transition-colors">
+          <h3 class="font-semibold text-lg mb-2 text-slate-900 dark:text-slate-100 transition-colors">Features</h3>
+          <ul class="list-disc list-inside text-slate-600 dark:text-slate-400 space-y-2 transition-colors">
             <li>Smooth scroll animations with requestAnimationFrame</li>
             <li>Works with both window and container scroll</li>
             <li>Accessibility features: focus trap, ARIA attributes, keyboard support</li>
@@ -112,14 +113,14 @@
   </div>
 
   <!-- Fly Out Components -->
-  <fly-out name="flyout-bottom" position="bottom" class="bg-white w-screen shadow-2xl">
+  <fly-out name="flyout-bottom" position="bottom" class="bg-white dark:bg-slate-800 w-screen shadow-2xl transition-colors">
     <div class="p-8 max-w-2xl mx-auto">
-      <h3 class="text-2xl font-bold text-slate-900 mb-4">Bottom Fly Out</h3>
-      <p class="text-slate-600 mb-6">
+      <h3 class="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-4 transition-colors">Bottom Fly Out</h3>
+      <p class="text-slate-600 dark:text-slate-400 mb-6 transition-colors">
         This fly-out slides up from the bottom. Try pressing ESC or clicking outside to close it.
       </p>
       <div class="flex gap-4">
-        <input type="text" placeholder="Focus trap demo" class="flex-1 px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        <input type="text" placeholder="Focus trap demo" class="flex-1 px-4 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" />
         <button class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Submit</button>
       </div>
     </div>
@@ -135,17 +136,17 @@
     </div>
   </fly-out>
 
-  <fly-out name="flyout-left" position="left" class="bg-white h-screen shadow-2xl" style="width: 400px; max-width: 90vw;">
+  <fly-out name="flyout-left" position="left" class="bg-white dark:bg-slate-800 h-screen shadow-2xl transition-colors" style="width: 400px; max-width: 90vw;">
     <div class="p-8 h-full flex flex-col">
-      <h3 class="text-2xl font-bold text-slate-900 mb-4">Left Fly Out</h3>
-      <p class="text-slate-600 mb-6">
+      <h3 class="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-4 transition-colors">Left Fly Out</h3>
+      <p class="text-slate-600 dark:text-slate-400 mb-6 transition-colors">
         This fly-out slides in from the left. Perfect for navigation menus or sidebars.
       </p>
       <nav class="space-y-2 flex-1">
-        <a href="#" class="block px-4 py-2 rounded hover:bg-slate-100 text-slate-700">Dashboard</a>
-        <a href="#" class="block px-4 py-2 rounded hover:bg-slate-100 text-slate-700">Settings</a>
-        <a href="#" class="block px-4 py-2 rounded hover:bg-slate-100 text-slate-700">Profile</a>
-        <a href="#" class="block px-4 py-2 rounded hover:bg-slate-100 text-slate-700">Logout</a>
+        <a href="#" class="block px-4 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors">Dashboard</a>
+        <a href="#" class="block px-4 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors">Settings</a>
+        <a href="#" class="block px-4 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors">Profile</a>
+        <a href="#" class="block px-4 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors">Logout</a>
       </nav>
     </div>
   </fly-out>
@@ -171,9 +172,9 @@
   </fly-out>
 
   <script>
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 10; i++) {
       const p = document.createElement("p");
-      p.className = "bg-slate-100 rounded-lg p-4 text-slate-700";
+      p.className = "bg-slate-100 dark:bg-slate-700 rounded-lg p-4 text-slate-700 dark:text-slate-300 transition-colors mb-4";
       p.innerText = "Content paragraph #" + (i + 1) + " - Scroll down to see the navbar hide!";
       fill.appendChild(p);
     }
