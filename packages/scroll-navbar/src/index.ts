@@ -20,6 +20,18 @@
  *   </scroll-navbar>
  *   <div>Scrollable content...</div>
  * </div>
+ *
+ * @example
+ * <!-- With offset (e.g., when a fixed header is above) -->
+ * <scroll-navbar offset="80">
+ *   <nav>Your navbar content</nav>
+ * </scroll-navbar>
+ *
+ * @example
+ * <!-- Disabled (navbar scrolls normally without hiding) -->
+ * <scroll-navbar disabled>
+ *   <nav>Your navbar content</nav>
+ * </scroll-navbar>
  */
 export class ScrollNavbar extends HTMLElement {
   private lastScroll = 0;
@@ -28,12 +40,22 @@ export class ScrollNavbar extends HTMLElement {
   private ticking = false;
   private resizeTimeout: ReturnType<typeof setTimeout> | null = null;
   private scrollParent: Element | Document = document;
+  private disabled = false;
+  private offset = 0;
 
   private boundHandleScroll: () => void;
   private boundHandleResize: () => void;
 
+  static get observedAttributes() {
+    return ['offset', 'disabled'];
+  }
+
   constructor() {
     super();
+
+    this.disabled = this.hasAttribute('disabled');
+    const offsetAttr = this.getAttribute('offset');
+    this.offset = offsetAttr ? parseInt(offsetAttr, 10) : 0;
 
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.innerHTML = `
@@ -41,7 +63,7 @@ export class ScrollNavbar extends HTMLElement {
         :host {
           display: block;
           position: sticky;
-          top: 0;
+          top: ${this.offset}px;
           left: 0;
           width: 100%;
         }
@@ -51,6 +73,29 @@ export class ScrollNavbar extends HTMLElement {
 
     this.boundHandleScroll = this.handleScroll.bind(this);
     this.boundHandleResize = this.handleResize.bind(this);
+  }
+
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
+    if (oldValue === newValue) return;
+
+    if (name === 'offset') {
+      this.offset = newValue ? parseInt(newValue, 10) : 0;
+      this.style.top = `${this.offset}px`;
+    }
+
+    if (name === 'disabled') {
+      const wasDisabled = this.disabled;
+      this.disabled = newValue !== null;
+
+      // Reset navbar position when disabled state changes
+      this.navbarOffset = 0;
+      this.updateNavbarPosition();
+
+      // If re-enabled, reset scroll tracking
+      if (wasDisabled && !this.disabled) {
+        this.lastScroll = this.getScrollPosition();
+      }
+    }
   }
 
   connectedCallback() {
@@ -94,15 +139,28 @@ export class ScrollNavbar extends HTMLElement {
 
   private isAtScrollTop(): boolean {
     if (this.scrollParent === document) {
-      return this.getBoundingClientRect().top <= 0;
+      return this.getBoundingClientRect().top <= this.offset;
     }
 
-    const parentRect = (this.scrollParent as Element).getBoundingClientRect();
+    const parent = this.scrollParent as Element;
+    const parentRect = parent.getBoundingClientRect();
     const navbarRect = this.getBoundingClientRect();
-    return navbarRect.top <= parentRect.top;
+
+    // Account for parent's border
+    const computedStyle = window.getComputedStyle(parent);
+    const borderTop = parseFloat(computedStyle.borderTopWidth) || 0;
+
+    const threshold = parentRect.top + borderTop + this.offset;
+    // Use small tolerance (1px) to account for floating point precision
+    return navbarRect.top <= threshold + 1;
   }
 
   private updateNavbar() {
+    if (this.disabled) {
+      this.ticking = false;
+      return;
+    }
+
     const currentScroll = this.getScrollPosition();
     const scrollDiff = currentScroll - this.lastScroll;
     const atTop = this.isAtScrollTop();

@@ -1,1 +1,5 @@
 @import "tailwindcss";
+
+fly-out{
+    @apply z-30;
+}
