@@ -200,9 +200,12 @@ export class FlyOut extends HTMLElement {
 
   private handleClickOutside = (e: PointerEvent) => {
     const target = e.target as Node;
-    const clickedOnTrigger = (target as Element).closest?.("fly-out-trigger");
+    const clickedTrigger = (target as Element).closest?.("fly-out-trigger") as HTMLElement;
 
-    if (!this.contains(target) && !clickedOnTrigger && this.show) {
+    // Check if clicked trigger is for THIS fly-out
+    const clickedOnThisTrigger = clickedTrigger && clickedTrigger.getAttribute('name') === this.name;
+
+    if (!this.contains(target) && !clickedOnThisTrigger && this.show) {
       this.close();
     }
   };
