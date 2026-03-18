@@ -1,8 +1,249 @@
 export default function Flyout(){
-    const el = document.createElement('div')
+    const el = document.createElement('div');
+    el.className = 'max-w-6xl mx-auto px-6 py-12';
     el.innerHTML = /*HTML*/`
-        <h1>Das ist die flyout page</h1>
-    `
+        <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4 transition-colors">Fly-Out</h1>
+        <p class="text-lg text-slate-600 dark:text-slate-400 mb-8 transition-colors">
+            Slide-in panels that can appear from any edge of the screen with smooth animations.
+        </p>
 
-    return el
+        <!-- Features -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-4 transition-colors">Features</h2>
+            <ul class="list-disc list-inside text-slate-600 dark:text-slate-400 space-y-2 transition-colors bg-white dark:bg-slate-800 rounded-lg p-6">
+                <li>Slide in from all four directions (top, bottom, left, right)</li>
+                <li>Focus trapping with keyboard navigation support</li>
+                <li>Press ESC to close</li>
+                <li>Click outside to close (can be disabled)</li>
+                <li>Body scroll locking when open (can be disabled)</li>
+                <li>Accessible with ARIA attributes</li>
+                <li>Custom events for open/close state</li>
+            </ul>
+        </section>
+
+        <!-- Usage -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-4 transition-colors">Usage</h2>
+            <div class="bg-slate-900 dark:bg-slate-950 rounded-lg p-6 overflow-x-auto">
+                <pre class="text-green-400 text-sm"><code>&lt;!-- The toggle button --&gt;
+&lt;fly-out-toggle name="sidebar"&gt;
+    Open Sidebar
+&lt;/fly-out-toggle&gt;
+
+&lt;!-- The fly-out panel --&gt;
+&lt;fly-out name="sidebar" position="left" class="bg-white h-screen"&gt;
+    &lt;div class="p-8"&gt;
+        &lt;h2&gt;Sidebar Content&lt;/h2&gt;
+        &lt;p&gt;Your content here&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/fly-out&gt;
+
+&lt;!-- With disabled features --&gt;
+&lt;fly-out
+    name="modal"
+    position="bottom"
+    disable-lock-scroll
+    disable-click-outside
+&gt;
+    Content...
+&lt;/fly-out&gt;</code></pre>
+            </div>
+        </section>
+
+        <!-- Demo -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-4 transition-colors">Demo</h2>
+            <p class="text-slate-600 dark:text-slate-400 mb-6 transition-colors">
+                Click the buttons below to open fly-outs from all four directions.
+            </p>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <fly-out-toggle name="demo-bottom" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium cursor-pointer transition-colors text-center">
+                    Open Bottom
+                </fly-out-toggle>
+
+                <fly-out-toggle name="demo-top" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium cursor-pointer transition-colors text-center">
+                    Open Top
+                </fly-out-toggle>
+
+                <fly-out-toggle name="demo-left" class="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-medium cursor-pointer transition-colors text-center">
+                    Open Left
+                </fly-out-toggle>
+
+                <fly-out-toggle name="demo-right" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium cursor-pointer transition-colors text-center">
+                    Open Right
+                </fly-out-toggle>
+            </div>
+        </section>
+
+        <!-- Attributes -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-4 transition-colors">Attributes</h2>
+
+            <h3 class="text-xl font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors">fly-out</h3>
+            <div class="bg-white dark:bg-slate-800 rounded-lg shadow overflow-hidden mb-6">
+                <table class="w-full">
+                    <thead class="bg-slate-100 dark:bg-slate-700">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-slate-900 dark:text-slate-100">Attribute</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-slate-900 dark:text-slate-100">Type</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-slate-900 dark:text-slate-100">Default</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-slate-900 dark:text-slate-100">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                        <tr>
+                            <td class="px-6 py-4 text-sm text-slate-900 dark:text-slate-100 font-mono">name</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">string</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">required</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Unique identifier for this fly-out</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 text-sm text-slate-900 dark:text-slate-100 font-mono">position</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">'bottom' | 'top' | 'left' | 'right'</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">'bottom'</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Edge from which the fly-out slides in</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 text-sm text-slate-900 dark:text-slate-100 font-mono">disable-lock-scroll</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">boolean</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">false</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Prevents body scroll locking when fly-out is open</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 text-sm text-slate-900 dark:text-slate-100 font-mono">disable-click-outside</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">boolean</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">false</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Prevents closing when clicking outside the fly-out</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="text-xl font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors">fly-out-toggle</h3>
+            <div class="bg-white dark:bg-slate-800 rounded-lg shadow overflow-hidden">
+                <table class="w-full">
+                    <thead class="bg-slate-100 dark:bg-slate-700">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-slate-900 dark:text-slate-100">Attribute</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-slate-900 dark:text-slate-100">Type</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-slate-900 dark:text-slate-100">Default</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-slate-900 dark:text-slate-100">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                        <tr>
+                            <td class="px-6 py-4 text-sm text-slate-900 dark:text-slate-100 font-mono">name</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">string</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">required</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Must match the name of the fly-out to control</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Events -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-4 transition-colors">Events</h2>
+            <div class="bg-white dark:bg-slate-800 rounded-lg shadow overflow-hidden">
+                <table class="w-full">
+                    <thead class="bg-slate-100 dark:bg-slate-700">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-slate-900 dark:text-slate-100">Event</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-slate-900 dark:text-slate-100">Detail</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-slate-900 dark:text-slate-100">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                        <tr>
+                            <td class="px-6 py-4 text-sm text-slate-900 dark:text-slate-100 font-mono">fly-out-opened</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">{ name: string }</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Dispatched when fly-out opens</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 text-sm text-slate-900 dark:text-slate-100 font-mono">fly-out-closed</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">{ name: string }</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Dispatched when fly-out closes</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 text-sm text-slate-900 dark:text-slate-100 font-mono">fly-out-state-changed</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">{ name: string, open: boolean }</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Dispatched when state changes</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Important Note -->
+        <section class="mb-12">
+            <div class="bg-yellow-50 dark:bg-yellow-900/20 border-l-4 border-yellow-400 p-4 rounded">
+                <p class="text-sm text-yellow-800 dark:text-yellow-200">
+                    <strong>⚠️ Note:</strong> The internal slide-in animation uses <code>transition: transform</code> on the <code>&lt;fly-out&gt;</code> element.
+                    If you override the <code>transition</code> property, you'll need to manually include the fly-out animation
+                    by adding <code>transform</code> to your transition (e.g., <code>transition: transform 0.2s, color 0.2s</code>).
+                </p>
+            </div>
+        </section>
+<fly-out name="demo-bottom" position="bottom" class="bg-white dark:bg-slate-800 w-screen shadow-2xl">
+    <div class="p-8 max-w-2xl mx-auto">
+      <h3 class="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-4 transition-colors">Bottom Fly Out</h3>
+      <p class="text-slate-600 dark:text-slate-400 mb-6 transition-colors">
+        This fly-out slides up from the bottom. Try pressing ESC or clicking outside to close it.
+      </p>
+      <div class="flex gap-4">
+        <input type="text" placeholder="Focus trap demo" class="flex-1 px-4 py-2 border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors" />
+        <button class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">Submit</button>
+      </div>
+    </div>
+  </fly-out>
+
+  <fly-out name="demo-top" position="top" class="bg-gradient-to-b from-green-600 to-green-700 w-screen shadow-2xl">
+    <div class="p-8 max-w-2xl mx-auto text-white">
+      <h3 class="text-2xl font-bold mb-4">Top Fly Out</h3>
+      <p class="mb-6 text-green-100">
+        This fly-out slides down from the top. Notice how the focus is trapped inside the fly-out.
+      </p>
+      <button class="px-6 py-2 bg-white text-green-600 rounded-lg hover:bg-green-50 font-medium">Action Button</button>
+    </div>
+  </fly-out>
+
+  <fly-out name="demo-left" position="left" class="bg-white dark:bg-slate-800 h-screen shadow-2xl" style="width: 400px; max-width: 90vw;">
+    <div class="p-8 h-full flex flex-col">
+      <h3 class="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-4 transition-colors">Left Fly Out</h3>
+      <p class="text-slate-600 dark:text-slate-400 mb-6 transition-colors">
+        This fly-out slides in from the left. Perfect for navigation menus or sidebars.
+      </p>
+      <nav class="space-y-2 flex-1">
+        <a href="#" class="block px-4 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors">Dashboard</a>
+        <a href="#" class="block px-4 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors">Settings</a>
+        <a href="#" class="block px-4 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors">Profile</a>
+        <a href="#" class="block px-4 py-2 rounded hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors">Logout</a>
+      </nav>
+    </div>
+  </fly-out>
+
+  <fly-out name="demo-right" position="right" class="bg-gradient-to-l from-purple-600 to-pink-600 h-screen shadow-2xl" style="width: 400px; max-width: 90vw;">
+    <div class="p-8 h-full flex flex-col text-white">
+      <h3 class="text-2xl font-bold mb-4">Right Fly Out</h3>
+      <p class="mb-6 text-purple-100">
+        This fly-out slides in from the right. Great for shopping carts, notifications, or filters.
+      </p>
+      <div class="space-y-4 flex-1">
+        <div class="bg-white/10 backdrop-blur rounded-lg p-4">
+          <h4 class="font-semibold mb-2">Notification 1</h4>
+          <p class="text-sm text-purple-100">Your order has been shipped!</p>
+        </div>
+        <div class="bg-white/10 backdrop-blur rounded-lg p-4">
+          <h4 class="font-semibold mb-2">Notification 2</h4>
+          <p class="text-sm text-purple-100">New message received.</p>
+        </div>
+      </div>
+      <fly-out-toggle name="flyout-right"><button class="px-6 py-3 bg-white text-purple-600 rounded-lg hover:bg-purple-50 font-medium w-full cursor-pointer">Close</button></fly-out-toggle>
+    </div>
+  </fly-out>
+    `;
+
+    return el;
 }
