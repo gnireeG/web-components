@@ -192,17 +192,19 @@ export class RouterLink extends HTMLElement{
             this.href = this.route.path;
         } else{
             this.href = '';
-            console.warn(`[RouterLink] Route "${this.to}" not found in registered routes. Available routes:`, this.router.routes.map(r => r.name));
+            // Only warn if routes have been set (not empty array)
+            if(this.router.routes.length > 0) {
+                console.warn(`[RouterLink] Route "${this.to}" not found in registered routes. Available routes:`, this.router.routes.map(r => r.name));
+            }
         }
         this.render();
     }
 
     connectedCallback(){
-        
         this.addEventListener('click', this.handleNavigate)
         document.addEventListener('router-routes-updated', this.loadRoutes);
         document.addEventListener('router-navigated', this.render);
-        this.render();
+        this.loadRoutes(); // Load routes immediately for dynamically added links
     }
 
     disconnectedCallback(){
