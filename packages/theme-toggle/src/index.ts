@@ -11,9 +11,42 @@
  * Features:
  * - Smooth animated transition between light and dark modes
  * - Automatically toggles the 'dark' class on document.body
+ * - Persists theme preference to localStorage
+ * - Respects system color scheme preference (prefers-color-scheme)
+ * - Automatically updates when system theme changes
  * - Accessible with proper ARIA attributes
  * - Respects prefers-reduced-motion for animations
  * - Uses Shadow DOM for style encapsulation
+ *
+ * Theme Priority:
+ * 1. User's manual selection (stored in localStorage)
+ * 2. System preference (prefers-color-scheme: dark/light)
+ * 3. Defaults to 'light'
+ *
+ * Usage:
+ * The theme-toggle component automatically toggles the 'dark' class on the <body> element.
+ * You can then use this class to implement your dark mode styles.
+ *
+ * With vanilla CSS:
+ * ```css
+ * body.dark {
+ *   background-color: #1a1a1a;
+ *   color: #ffffff;
+ * }
+ * ```
+ *
+ * With Tailwind CSS:
+ * Add this to your CSS file (e.g., app.css):
+ * ```css
+ * @import "tailwindcss";
+ * @custom-variant dark (&:where(.dark, .dark *));
+ * ```
+ * Then use Tailwind's dark variant:
+ * ```html
+ * <div class="bg-white dark:bg-slate-900 text-black dark:text-white">
+ *   Content that adapts to theme
+ * </div>
+ * ```
  *
  * @credits
  * Based on the theme switch component by Adam Argyle
@@ -29,27 +62,67 @@ export class ThemeToggle extends HTMLElement{
     constructor(){
         super();
         this.maskId = 'mask-theme-toggle-' + Math.random().toString(36).substr(2, 9);
-        this.shadow = this.attachShadow({ mode: 'open' })
+        this.shadow = this.attachShadow({ mode: 'open' });
+        this.mode = this.getColorPreference()
         this.render();
         this.button = this.shadow.querySelector('.theme-toggle');
+        this.reflectTheme();
     }
 
-    private handleClick(){
-        if(this.mode === 'dark') {
-            this.mode = 'light';
-            this.button?.classList.remove('dark');
-            document.body.classList.remove('dark');
-        } else if(this.mode === 'light'){
-            this.mode = 'dark';
-            this.button?.classList.add('dark');
-            document.body.classList.add('dark');
+    private handleClick = () => {
+        this.toggleTheme();
+        this.reflectTheme();
+    }
+
+    private setLocalStorage = () =>{
+        localStorage.setItem('theme', this.mode)
+    }
+
+    private getColorPreference = () => {
+        const localStorageTheme = localStorage.getItem('theme')
+        if(localStorageTheme && (localStorageTheme === 'light' || localStorageTheme === 'dark')){
+            return localStorageTheme;
         } else{
-            this.mode = 'light';
+            return window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light'
         }
+    }
+
+    private toggleTheme = () =>{
+        if(this.mode === 'dark') {
+            this.setTheme('light')
+        } else if(this.mode === 'light'){
+            this.setTheme('dark')
+        } else{
+            this.setTheme('light')
+        }
+        this.setLocalStorage();
+    }
+
+    private setTheme = (mode: 'light'|'dark') => {
+        this.mode = mode;
+    }
+    
+    private reflectTheme = () => {
+        if(this.mode === 'dark'){
+            this.button?.classList.add('dark')
+            document.body.classList.add('dark')
+        }
+        if(this.mode === 'light'){
+            this.button?.classList.remove('dark')
+            document.body.classList.remove('dark')
+        }
+    }
+    
+    private handleSystemDesignChange = ( e: MediaQueryListEvent ) => {
+        this.setTheme( e.matches ? 'dark' : 'light' );
+        this.reflectTheme();
     }
 
     connectedCallback(){
         this.addEventListener('click', this.handleClick)
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', this.handleSystemDesignChange)
     }
 
     disconnectedCallback(){
