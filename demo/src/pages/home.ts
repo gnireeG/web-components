@@ -46,7 +46,7 @@ export default function Home(){
                 <p class="text-slate-600 dark:text-slate-400 mb-4 transition-colors">
                     Animated theme switcher with system preference detection and localStorage persistence.
                 </p>
-                <span class="text-slate-500 dark:text-slate-400">(See navbar above)</span>
+                <router-link to="themetoggle" class="text-blue-600 dark:text-blue-400 hover:underline">View Documentation →</router-link>
             </div>
         </div>
 

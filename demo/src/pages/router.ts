@@ -55,6 +55,52 @@ router.routes = [
             </div>
         </section>
 
+        <!-- Custom 404 Page -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-4 transition-colors">Custom 404 Not Found Page</h2>
+            <p class="text-slate-600 dark:text-slate-400 mb-4 transition-colors">
+                You can create a custom 404 page by adding a route with <code class="bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded">name: '*'</code> and <code class="bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded">path: '*'</code>.
+                If no custom 404 route exists, the router will render a default 404 component.
+            </p>
+            <div class="bg-slate-900 dark:bg-slate-950 rounded-lg p-6 overflow-x-auto mb-4">
+                <pre class="text-green-400 text-sm"><code>import NotFoundPage from './pages/not-found';
+
+router.routes = [
+  {
+    name: 'home',
+    path: '/',
+    component: HomePage
+  },
+  {
+    name: 'about',
+    path: '/about',
+    component: AboutPage
+  },
+  {
+    name: '*',
+    path: '*',
+    component: NotFoundPage  // Custom 404 page
+  }
+];</code></pre>
+            </div>
+            <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-400 p-4 rounded">
+                <p class="text-sm text-blue-800 dark:text-blue-200 mb-2">
+                    <strong>404 Event Handling:</strong>
+                </p>
+                <p class="text-sm text-blue-800 dark:text-blue-200 mb-3">
+                    When a 404 occurs, the router dispatches a <code class="bg-blue-100 dark:bg-blue-900 px-1 py-0.5 rounded">router-route-not-found</code> event and adds a meta tag for SEO crawlers.
+                    The meta tag is automatically removed when navigating to a valid route.
+                </p>
+                <div class="bg-slate-900 dark:bg-slate-950 rounded p-3 overflow-x-auto">
+                    <pre class="text-green-400 text-xs"><code>// Listen to 404 events for analytics, logging, etc.
+document.addEventListener('router-route-not-found', (e) => {
+  console.log('404 for path:', e.detail.path);
+  // Send to analytics, log to server, etc.
+});</code></pre>
+                </div>
+            </div>
+        </section>
+
         <!-- Page Components -->
         <section class="mb-12">
             <h2 class="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-4 transition-colors">Creating Page Components</h2>
@@ -146,6 +192,10 @@ export default function HomePage() {
                         <tr>
                             <td class="px-6 py-4 text-sm text-slate-900 dark:text-slate-100 font-mono">router-navigated</td>
                             <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Dispatched after navigation completes</td>
+                        </tr>
+                        <tr>
+                            <td class="px-6 py-4 text-sm text-slate-900 dark:text-slate-100 font-mono">router-route-not-found</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Dispatched when no route matches the current path (detail: {path: string})</td>
                         </tr>
                     </tbody>
                 </table>
