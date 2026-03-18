@@ -1,3 +1,4 @@
+
 /**
  * Route configuration object
  */
@@ -41,6 +42,7 @@ export type Route = {
  */
 export class RouterOutlet extends HTMLElement{
 
+    private static stylesApplied = false;
     private _routes: Route[] = [];
     public route: Route | undefined = undefined;
 
@@ -56,6 +58,12 @@ export class RouterOutlet extends HTMLElement{
 
     constructor(){
         super();
+        if (!RouterOutlet.stylesApplied) {
+            const sheet = new CSSStyleSheet();
+            sheet.replaceSync('router-outlet { display: block; }');
+            document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
+            RouterOutlet.stylesApplied = true;
+        }
         this.render();
     }
 
