@@ -1,3 +1,28 @@
+/**
+ * FlyOut component - A slide-in panel that can appear from any edge of the screen
+ *
+ * @element fly-out
+ *
+ * @attr {string} name - Required. Unique identifier for this fly-out
+ * @attr {('bottom'|'top'|'left'|'right')} [position='bottom'] - Edge from which the fly-out slides in
+ * @attr {boolean} [disable-lock-scroll] - Prevents body scroll locking when fly-out is open
+ * @attr {boolean} [disable-click-outside] - Prevents closing when clicking outside the fly-out
+ *
+ * @fires fly-out-opened - Dispatched when the fly-out opens. Detail: { name: string }
+ * @fires fly-out-closed - Dispatched when the fly-out closes. Detail: { name: string }
+ * @fires fly-out-state-changed - Dispatched when open/close state changes. Detail: { name: string, open: boolean }
+ *
+ * @example
+ * ```html
+ * <fly-out name="sidebar" position="left">
+ *   <div>Content here</div>
+ * </fly-out>
+ * ```
+ *
+ * @note ⚠️ The internal slide-in animation uses `transition: transform` on the `:host` element (`<fly-out>`).
+ * If you override the `transition` property, you'll need to manually include the fly-out animation
+ * by adding `transform` to your transition (e.g., `transition: transform 0.2s, color 0.2s`).
+ */
 export class FlyOut extends HTMLElement {
   private name: string | null = null;
   private position: "bottom" | "top" | "left" | "right" = "bottom";
@@ -51,6 +76,9 @@ export class FlyOut extends HTMLElement {
                 }
                 :host(.ready){
                     transition: transform 0.2s ease-out;
+                }
+                :host(.open){
+                    transform: ${styles.openTransform};
                 }
             </style>
             <slot></slot>
@@ -125,12 +153,17 @@ export class FlyOut extends HTMLElement {
     }
   }
 
+  /**
+   * Opens the fly-out panel
+   * - Locks body scroll (unless disabled)
+   * - Sets focus to first focusable element
+   * - Adds keyboard event listeners (ESC to close, Tab for focus trap)
+   */
   public open() {
     this.show = true;
     this.previouslyFocusedElement = document.activeElement as HTMLElement;
 
-    const styles = this.getPositionStyles();
-    this.style.transform = styles.openTransform;
+    this.classList.add("open");
     if (!this.disableLockScroll) document.body.style.overflow = "hidden";
 
     document.addEventListener("keydown", this.handleKeyDown);
@@ -152,10 +185,15 @@ export class FlyOut extends HTMLElement {
     );
   }
 
+  /**
+   * Closes the fly-out panel
+   * - Unlocks body scroll
+   * - Restores focus to previously focused element
+   * - Removes keyboard event listeners
+   */
   public close() {
     this.show = false;
-    const styles = this.getPositionStyles();
-    this.style.transform = styles.closedTransform;
+    this.classList.remove("open");
     if (!this.disableLockScroll) document.body.style.overflow = "";
 
     document.removeEventListener("keydown", this.handleKeyDown);
@@ -183,6 +221,9 @@ export class FlyOut extends HTMLElement {
     );
   }
 
+  /**
+   * Toggles the fly-out open/closed state
+   */
   public toggle() {
     if (this.show) {
       this.close();
@@ -236,6 +277,24 @@ export class FlyOut extends HTMLElement {
   }
 }
 
+/**
+ * FlyOutToggle component - Button/trigger to open/close a fly-out
+ *
+ * @element fly-out-toggle
+ *
+ * @attr {string} name - Required. Must match the name of the fly-out to control
+ *
+ * @example
+ * ```html
+ * <fly-out-toggle name="sidebar">
+ *   Open Sidebar
+ * </fly-out-toggle>
+ *
+ * <fly-out name="sidebar" position="left">
+ *   <div>Sidebar content</div>
+ * </fly-out>
+ * ```
+ */
 export class FlyOutToggle extends HTMLElement {
   private flyOutName: string | null = null;
 

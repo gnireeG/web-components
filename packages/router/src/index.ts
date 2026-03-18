@@ -1,9 +1,44 @@
+/**
+ * Route configuration object
+ */
 export type Route = {
+    /** Unique name identifier for the route (used by router-link) */
     name: string,
+    /** URL path (e.g., '/', '/about', '/users/:id') */
     path: string,
+    /** Function that returns the component to render for this route */
     component: () => HTMLElement;
 }
 
+/**
+ * RouterOutlet component - Container that renders the current route's component
+ *
+ * @element router-outlet
+ *
+ * @property {Route[]} routes - Array of route configurations
+ * @property {Route | undefined} route - Currently active route
+ *
+ * @fires router-routes-updated - Dispatched when routes array is set/updated
+ * @fires router-before-navigate - Dispatched before navigation occurs
+ * @fires router-navigated - Dispatched after navigation completes
+ *
+ * @example
+ * ```html
+ * <router-outlet></router-outlet>
+ *
+ * <script>
+ * import HomePage from './pages/home';
+ *
+ * const router = document.querySelector('router-outlet');
+ * router.routes = [
+ *   { name: 'home', path: '/', component: HomePage },
+ *   { name: 'about', path: '/about', component: AboutPage }
+ * ];
+ * </script>
+ * ```
+ *
+ * @note Paths with and without trailing slashes are treated as equivalent (e.g., '/about' === '/about/')
+ */
 export class RouterOutlet extends HTMLElement{
 
     private _routes: Route[] = [];
@@ -57,6 +92,10 @@ export class RouterOutlet extends HTMLElement{
         return normalized === '' ? '/' : normalized;
     }
 
+    /**
+     * Programmatically navigate to a route
+     * @param route - The route object to navigate to
+     */
     public navigate(route: Route){
         document.dispatchEvent(new CustomEvent('router-before-navigate'));
         window.history.pushState({}, '', route.path);
@@ -65,6 +104,28 @@ export class RouterOutlet extends HTMLElement{
     }
 }
 
+/**
+ * RouterLink component - Navigation link that routes without page reload
+ *
+ * @element router-link
+ *
+ * @attr {string} to - Required. Name of the route to navigate to (must match a route name in router-outlet)
+ *
+ * @example
+ * ```html
+ * <router-link to="home">Home</router-link>
+ * <router-link to="about">About</router-link>
+ * ```
+ *
+ * @note The active route link will have the 'active' class on its anchor element for styling
+ * @example
+ * ```css
+ * router-link a.active {
+ *   font-weight: bold;
+ *   color: blue;
+ * }
+ * ```
+ */
 export class RouterLink extends HTMLElement{
 
     router: RouterOutlet | null = null;
