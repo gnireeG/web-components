@@ -22,6 +22,7 @@ export type Route = {
  * @fires router-routes-updated - Dispatched when routes array is set/updated
  * @fires router-before-navigate - Dispatched before navigation occurs
  * @fires router-navigated - Dispatched after navigation completes
+ * @fires router-route-not-found - Dispatched when no route matches the current path (detail contains {path: string})
  *
  * @example
  * ```html
@@ -39,6 +40,23 @@ export type Route = {
  * ```
  *
  * @note Paths with and without trailing slashes are treated as equivalent (e.g., '/about' === '/about/')
+ * @note To create a custom 404 Not Found page, add a route with name: '*' and path: '*'. If no custom 404 route exists, a default 404 component will be rendered.
+ * @note When a 404 occurs, a 'router-route-not-found' event is dispatched and a meta tag is added for SEO crawlers. The meta tag is automatically removed when navigating to a valid route.
+ *
+ * @example
+ * ```javascript
+ * // Custom 404 route
+ * router.routes = [
+ *   { name: 'home', path: '/', component: HomePage },
+ *   { name: '*', path: '*', component: NotFoundPage }
+ * ];
+ *
+ * // Listen to 404 events for analytics, logging, etc.
+ * document.addEventListener('router-route-not-found', (e) => {
+ *   console.log('404 for path:', e.detail.path);
+ *   // Send to analytics, log to server, etc.
+ * });
+ * ```
  */
 export class RouterOutlet extends HTMLElement{
 
@@ -52,6 +70,7 @@ export class RouterOutlet extends HTMLElement{
 
     public set routes(value: Route[]) {
         this._routes = value;
+        this.updateRouteFromPath();
         this.render();
         document.dispatchEvent(new CustomEvent('router-routes-updated'));
     }
@@ -64,30 +83,86 @@ export class RouterOutlet extends HTMLElement{
             document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
             RouterOutlet.stylesApplied = true;
         }
-        this.render();
     }
 
     connectedCallback(){
-        window.addEventListener('popstate', this.handleRouting)
+        window.addEventListener('popstate', this.handlePopstateChange)
+        this.updateRouteFromPath();
         this.render();
     }
 
     disconnectedCallback(){
-        window.removeEventListener('popstate', this.handleRouting)
+        window.removeEventListener('popstate', this.handlePopstateChange)
     }
 
-    private handleRouting = () => {
+    private handlePopstateChange = () => {
+        this.updateRouteFromPath();
         this.render();
+        document.dispatchEvent(new CustomEvent('router-navigated'));
+    }
+
+    private notFoundComponent = () =>{
+        const el = document.createElement('div')
+            el.classList.add('router-not-found-page')
+            el.innerHTML = /*HTML*/`
+                <style>
+                    .router-not-found-page{
+                        display: flex;
+                        justify-content: center;
+                        padding: 2rem 1rem;
+                    }
+                    .router-not-found-page h2{
+                        font-weight: 700;
+                        font-size: 1.5em;
+                        font-style: italic;
+                    }
+                </style>
+                <div>
+                    <h2>404 - page not found</h2>
+                    <p>We are sorry. The requested page cannot be found.</p>
+                </div>
+        `
+        return el
+    }
+
+    private updateRouteFromPath(){
+        const path = this.normalizePath(window.location.pathname);
+        this.route = this._routes.find(r => this.normalizePath(r.path) === path);
     }
 
     private render(){
-        const path = this.normalizePath(window.location.pathname);
-        this.route = this._routes.find(r => this.normalizePath(r.path) === path)
         this.innerHTML = '';
         if(this.route){
             this.appendChild(this.route.component())
+            // Remove 404 meta tag when navigating to valid route
+            const existingMeta = document.querySelector('meta[name="prerender-status-code"]');
+            if (existingMeta) {
+                existingMeta.remove();
+            }
         } else if(this._routes.length > 0){
-            console.warn(`[RouterOutlet] No route found for path "${path}". Available routes:`, this._routes.map(r => r.path));
+            // if provided use custom 404 page.
+            const notFoundPage = this._routes.find(r => r.name === '*')
+            if(notFoundPage){
+                this.appendChild(notFoundPage.component())
+            } else{
+                this.appendChild(this.notFoundComponent())
+            }
+            const path = this.normalizePath(window.location.pathname);
+            console.warn(`[RouterOutlet] No route found for path "${path}".`);
+
+            // Dispatch 404 event for external handling (analytics, logging, etc.)
+            document.dispatchEvent(new CustomEvent('router-route-not-found', {
+                detail: { path }
+            }));
+
+            // Add meta tag for SEO crawlers
+            const existingMeta = document.querySelector('meta[name="prerender-status-code"]');
+            if (!existingMeta) {
+                const meta = document.createElement('meta');
+                meta.name = 'prerender-status-code';
+                meta.content = '404';
+                document.head.appendChild(meta);
+            }
         }
     }
 
@@ -107,6 +182,7 @@ export class RouterOutlet extends HTMLElement{
     public navigate(route: Route){
         document.dispatchEvent(new CustomEvent('router-before-navigate'));
         window.history.pushState({}, '', route.path);
+        this.updateRouteFromPath();
         this.render();
         document.dispatchEvent(new CustomEvent('router-navigated'));
     }
@@ -194,7 +270,7 @@ export class RouterLink extends HTMLElement{
             this.href = '';
             // Only warn if routes have been set (not empty array)
             if(this.router.routes.length > 0) {
-                console.warn(`[RouterLink] Route "${this.to}" not found in registered routes. Available routes:`, this.router.routes.map(r => r.name));
+                console.warn(`[RouterLink] Route "${this.to}" not found in registered routes.`);
             }
         }
         this.render();
