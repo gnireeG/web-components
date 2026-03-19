@@ -35,7 +35,7 @@
  */
 export class ScrollNavbar extends HTMLElement {
   private lastScroll = 0;
-  private navbarOffset = 0;
+  private translateAmount = 0;
   private navbarHeight = 0;
   private ticking = false;
   private resizeTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -83,8 +83,8 @@ export class ScrollNavbar extends HTMLElement {
       this.disabled = newValue !== null;
 
       // Reset navbar position when disabled state changes
-      this.navbarOffset = 0;
-      this.updateNavbarPosition();
+      this.translateAmount = 0;
+      this.applyTransform();
 
       // If re-enabled, reset scroll tracking
       if (wasDisabled && !this.disabled) {
@@ -100,7 +100,7 @@ export class ScrollNavbar extends HTMLElement {
     }
 
     requestAnimationFrame(() => {
-      this.updateNavbarHeight();
+      this.measureNavbarHeight();
     });
 
     this.scrollParent.addEventListener('scroll', this.handleScroll, { passive: true });
@@ -116,13 +116,8 @@ export class ScrollNavbar extends HTMLElement {
     }
   }
 
-  private updateNavbarHeight() {
+  private measureNavbarHeight() {
     this.navbarHeight = this.offsetHeight;
-
-    if (this.navbarOffset > this.navbarHeight) {
-      this.navbarOffset = 0;
-      this.updateNavbarPosition();
-    }
   }
 
   private getScrollPosition(): number {
@@ -132,7 +127,7 @@ export class ScrollNavbar extends HTMLElement {
     return (this.scrollParent as Element).scrollTop;
   }
 
-  private isAtScrollTop(): boolean {
+  private isSticky(): boolean {
     if (this.scrollParent === document) {
       return this.getBoundingClientRect().top <= this.offset;
     }
@@ -150,36 +145,37 @@ export class ScrollNavbar extends HTMLElement {
     return navbarRect.top <= threshold + 1;
   }
 
-  private updateNavbar() {
+  private calculateTranslateAmount() {
     if (this.disabled) {
-      this.ticking = false;
       return;
     }
 
     const currentScroll = this.getScrollPosition();
     const scrollDiff = currentScroll - this.lastScroll;
-    const atTop = this.isAtScrollTop();
+    const isSticky = this.isSticky();
 
-    if (currentScroll <= 0 || !atTop) {
-        this.navbarOffset = 0;
+    if (currentScroll <= 0 || !isSticky) {
+        this.translateAmount = 0;
     } else if (scrollDiff > 0) {
-        this.navbarOffset = Math.min(this.navbarOffset + scrollDiff, this.navbarHeight);
+        this.translateAmount = Math.min(this.translateAmount + scrollDiff, this.navbarHeight);
     } else {
-        this.navbarOffset = Math.max(this.navbarOffset + scrollDiff, 0);
+        this.translateAmount = Math.max(this.translateAmount + scrollDiff, 0);
     }
 
     this.lastScroll = currentScroll;
-    this.updateNavbarPosition();
-    this.ticking = false;
     }
 
-  private updateNavbarPosition() {
-    this.style.transform = `translateY(-${this.navbarOffset}px)`;
+  private applyTransform() {
+    this.style.transform = `translateY(-${this.translateAmount}px)`;
   }
 
   private handleScroll = () => {
     if (!this.ticking) {
-      requestAnimationFrame(() => this.updateNavbar());
+      requestAnimationFrame(() => {
+        this.calculateTranslateAmount();
+        this.applyTransform();
+        this.ticking = false;
+      });
       this.ticking = true;
     }
   }
@@ -187,7 +183,7 @@ export class ScrollNavbar extends HTMLElement {
   private handleResize = () => {
     if (this.resizeTimeout) clearTimeout(this.resizeTimeout);
     this.resizeTimeout = setTimeout(() => {
-      this.updateNavbarHeight();
+      this.measureNavbarHeight();
     }, 150);
   }
 }
