@@ -43,9 +43,6 @@ export class ScrollNavbar extends HTMLElement {
   private disabled = false;
   private offset = 0;
 
-  private boundHandleScroll: () => void;
-  private boundHandleResize: () => void;
-
   static get observedAttributes() {
     return ['offset', 'disabled'];
   }
@@ -71,8 +68,6 @@ export class ScrollNavbar extends HTMLElement {
       <slot></slot>
     `;
 
-    this.boundHandleScroll = this.handleScroll.bind(this);
-    this.boundHandleResize = this.handleResize.bind(this);
   }
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
@@ -108,13 +103,13 @@ export class ScrollNavbar extends HTMLElement {
       this.updateNavbarHeight();
     });
 
-    this.scrollParent.addEventListener('scroll', this.boundHandleScroll, { passive: true });
-    window.addEventListener('resize', this.boundHandleResize);
+    this.scrollParent.addEventListener('scroll', this.handleScroll, { passive: true });
+    window.addEventListener('resize', this.handleResize);
   }
 
   disconnectedCallback() {
-    this.scrollParent.removeEventListener('scroll', this.boundHandleScroll);
-    window.removeEventListener('resize', this.boundHandleResize);
+    this.scrollParent.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('resize', this.handleResize);
 
     if (this.resizeTimeout) {
       clearTimeout(this.resizeTimeout);
@@ -182,14 +177,14 @@ export class ScrollNavbar extends HTMLElement {
     this.style.transform = `translateY(-${this.navbarOffset}px)`;
   }
 
-  private handleScroll() {
+  private handleScroll = () => {
     if (!this.ticking) {
       requestAnimationFrame(() => this.updateNavbar());
       this.ticking = true;
     }
   }
 
-  private handleResize() {
+  private handleResize = () => {
     if (this.resizeTimeout) clearTimeout(this.resizeTimeout);
     this.resizeTimeout = setTimeout(() => {
       this.updateNavbarHeight();
