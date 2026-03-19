@@ -63,6 +63,7 @@ export class RouterOutlet extends HTMLElement{
     private static stylesApplied = false;
     private _routes: Route[] = [];
     public route: Route | undefined = undefined;
+    public params: Record<string, string> = {};
 
     public get routes(): Route[] {
         return this._routes;
@@ -127,7 +128,55 @@ export class RouterOutlet extends HTMLElement{
 
     private updateRouteFromPath(){
         const path = this.normalizePath(window.location.pathname);
-        this.route = this._routes.find(r => this.normalizePath(r.path) === path);
+
+        // Try exact match first
+        const exactMatch = this._routes.find(r => this.normalizePath(r.path) === path);
+        if(exactMatch){
+            this.route = exactMatch;
+            this.params = {};
+            return;
+        }
+
+        // Try dynamic route matching
+        for(const route of this._routes){
+            const match = this.matchRoute(route.path, path);
+            if(match){
+                this.route = route;
+                this.params = match.params;
+                return;
+            }
+        }
+
+        // No match found
+        this.route = undefined;
+        this.params = {};
+    }
+
+    private matchRoute(routePath: string, actualPath: string): { params: Record<string, string> } | null {
+        const routeSegments = this.normalizePath(routePath).split('/');
+        const pathSegments = actualPath.split('/');
+
+        if(routeSegments.length !== pathSegments.length){
+            return null;
+        }
+
+        const params: Record<string, string> = {};
+
+        for(let i = 0; i < routeSegments.length; i++){
+            const routeSegment = routeSegments[i];
+            const pathSegment = pathSegments[i];
+
+            // Check if it's a dynamic segment {paramName}
+            if(routeSegment.startsWith('{') && routeSegment.endsWith('}')){
+                const paramName = routeSegment.slice(1, -1);
+                params[paramName] = pathSegment;
+            } else if(routeSegment !== pathSegment){
+                // Not a dynamic segment and doesn't match
+                return null;
+            }
+        }
+
+        return { params };
     }
 
     private render(){
@@ -179,11 +228,24 @@ export class RouterOutlet extends HTMLElement{
      * Programmatically navigate to a route
      * @param route - The route object to navigate to
      */
-    public navigate(route: Route){
+    public navigateToRoute(route: Route){
+        this.performNavigation(route.path);
+    }
+
+    /**
+     * Programmatically navigate to a path
+     * @param path - The path to navigate to (can include dynamic segments already resolved)
+     */
+    public navigateToPath(path: string){
+        this.performNavigation(path);
+    }
+
+    private performNavigation(path: string){
         document.dispatchEvent(new CustomEvent('router-before-navigate'));
-        window.history.pushState({}, '', route.path);
+        window.history.pushState({}, '', path);
         this.updateRouteFromPath();
         this.render();
+        window.scrollTo({top: 0})
         document.dispatchEvent(new CustomEvent('router-navigated'));
     }
 }
@@ -214,6 +276,7 @@ export class RouterLink extends HTMLElement{
 
     router: RouterOutlet | null = null;
     to: string | null;
+    params: Record<string, string> = {};
     href: string = '';
     route: Route | undefined = undefined;
     private anchor: HTMLAnchorElement | null = null;
@@ -221,6 +284,15 @@ export class RouterLink extends HTMLElement{
     constructor(){
         super();
         this.to = this.getAttribute('to');
+        const paramsAttr = this.getAttribute('params');
+        if(paramsAttr){
+            try {
+                this.params = JSON.parse(paramsAttr);
+            } catch(e) {
+                console.warn('[RouterLink] Invalid params attribute. Must be valid JSON.');
+                this.params = {};
+            }
+        }
     }
 
     private render = () =>{
@@ -254,7 +326,9 @@ export class RouterLink extends HTMLElement{
             console.warn(`[RouterLink] Route "${this.to}" not found. Check if the route is registered.`);
             return;
         }
-        this.router.navigate(this.route);
+        // Navigate with the built path (params already replaced)
+        const pathToNavigate = this.buildPath(this.route.path, this.params);
+        this.router.navigateToPath(pathToNavigate);
     }
 
     private loadRoutes = () => {
@@ -265,7 +339,8 @@ export class RouterLink extends HTMLElement{
         }
         this.route = this.router.routes.find(r => r.name === this.to);
         if(this.route){
-            this.href = this.route.path;
+            // Replace dynamic segments with params
+            this.href = this.buildPath(this.route.path, this.params);
         } else{
             this.href = '';
             // Only warn if routes have been set (not empty array)
@@ -274,6 +349,15 @@ export class RouterLink extends HTMLElement{
             }
         }
         this.render();
+    }
+
+    private buildPath(path: string, params: Record<string, string>): string {
+        let result = path;
+        // Replace {paramName} with actual values
+        for(const [key, value] of Object.entries(params)){
+            result = result.replace(`{${key}}`, value);
+        }
+        return result;
     }
 
     connectedCallback(){

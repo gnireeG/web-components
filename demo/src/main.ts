@@ -46,6 +46,11 @@ router.routes = [
         component: RouterPage
     },
     {
+        name: 'dynamic',
+        path: '/router/{slug}',
+        component: RouterPage
+    },
+    {
         name: 'themetoggle',
         path: '/theme-toggle',
         component: ThemeToggle

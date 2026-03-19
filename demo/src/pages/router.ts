@@ -1,12 +1,35 @@
+import { RouterOutlet } from "@gnireeg/router";
+
 export default function RouterPage(){
+    const router = document.querySelector('router-outlet') as RouterOutlet;
     const el = document.createElement('div');
     el.className = 'max-w-6xl mx-auto px-6 py-12';
     el.innerHTML = /*HTML*/`
         <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4 transition-colors">Router</h1>
         <p class="text-lg text-slate-600 dark:text-slate-400 mb-8 transition-colors">
-            Client-side routing with support for navigation links and active states.
+            Client-side routing with support for navigation links, active states, and dynamic route parameters.
         </p>
+    `
+    if(router.params.slug){
+        el.innerHTML += /*HTML*/`
+            <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-l-4 border-blue-500 p-6 rounded-lg mb-8 shadow-sm">
+                <div class="flex items-start gap-3">
+                    <div class="text-2xl">🔗</div>
+                    <div>
+                        <p class="text-sm font-semibold text-blue-900 dark:text-blue-200 mb-2">Dynamic Route Parameter Detected!</p>
+                        <p class="text-sm text-blue-800 dark:text-blue-300">
+                            Current slug: <code class="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded font-mono text-blue-900 dark:text-blue-100">${router.params.slug}</code>
+                        </p>
+                        <p class="text-xs text-blue-700 dark:text-blue-400 mt-2">
+                            Try navigating to different slugs like <code class="bg-blue-100 dark:bg-blue-900 px-1 rounded">/router/hello</code> or <code class="bg-blue-100 dark:bg-blue-900 px-1 rounded">/router/world</code>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        `
+    }
 
+    el.innerHTML+= /*HTML*/`
         <!-- Features -->
         <section class="mb-12">
             <h2 class="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-4 transition-colors">Features</h2>
@@ -14,6 +37,7 @@ export default function RouterPage(){
                 <li>Client-side routing without page reloads</li>
                 <li>Active link detection with CSS class</li>
                 <li>Browser history integration (back/forward buttons work)</li>
+                <li>Dynamic route parameters (e.g., <code class="bg-slate-200 dark:bg-slate-700 px-1 rounded">/post/{id}</code>)</li>
                 <li>Automatic trailing slash normalization</li>
                 <li>Custom events for navigation lifecycle</li>
                 <li>Type-safe route definitions</li>
@@ -52,6 +76,46 @@ router.routes = [
   }
 ];
 &lt;/script&gt;</code></pre>
+            </div>
+        </section>
+
+        <!-- Dynamic Routes -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-4 transition-colors">Dynamic Route Parameters</h2>
+            <p class="text-slate-600 dark:text-slate-400 mb-4 transition-colors">
+                Define dynamic segments in your routes using curly braces <code class="bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded">{paramName}</code>.
+                Access the parameters via <code class="bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded">router.params</code> in your component.
+            </p>
+            <div class="bg-slate-900 dark:bg-slate-950 rounded-lg p-6 overflow-x-auto mb-4">
+                <pre class="text-green-400 text-sm"><code>// Define routes with dynamic segments
+router.routes = [
+  {
+    name: 'post',
+    path: '/post/{id}',
+    component: PostPage
+  },
+  {
+    name: 'user-post',
+    path: '/users/{userId}/posts/{postId}',
+    component: UserPostPage
+  }
+];
+
+// Access parameters in your component
+function PostPage() {
+  const router = document.querySelector('router-outlet');
+  const { id } = router.params; // Get the 'id' parameter
+
+  const el = document.createElement('div');
+  el.innerHTML = \`&lt;h1&gt;Post \${id}&lt;/h1&gt;\`;
+  return el;
+}</code></pre>
+            </div>
+            <div class="bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-400 p-4 rounded">
+                <p class="text-sm text-amber-800 dark:text-amber-200">
+                    <strong>Try it out:</strong> Navigate to <code class="bg-amber-100 dark:bg-amber-900 px-1 py-0.5 rounded"><router-link to="dynamic" params='{"slug":"test-slug"}'>/router/test-slug</router-link></code>
+                    to see dynamic parameters in action on this page!
+                </p>
             </div>
         </section>
 
