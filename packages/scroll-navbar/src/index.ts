@@ -28,6 +28,13 @@
  * </scroll-navbar>
  *
  * @example
+ * <!-- With offset-element (automatically uses another element's height as offset) -->
+ * <header id="top-header">Fixed header</header>
+ * <scroll-navbar offset-element="#top-header">
+ *   <nav>Your navbar content</nav>
+ * </scroll-navbar>
+ *
+ * @example
  * <!-- Disabled (navbar scrolls normally without hiding) -->
  * <scroll-navbar disabled>
  *   <nav>Your navbar content</nav>
@@ -38,10 +45,15 @@ export class ScrollNavbar extends HTMLElement {
   private translateAmount = 0;
   private navbarHeight = 0;
   private ticking = false;
+  private shadow: ShadowRoot;
   private resizeTimeout: ReturnType<typeof setTimeout> | null = null;
   private scrollParent: Element | Document = document;
   private disabled = false;
   private offset = 0;
+  private offsetElement: Element | null = null;
+  private totalOffset = 0;
+  private offsetElementObserver: ResizeObserver | null = null;
+  private isResizing = false;
 
   static get observedAttributes() {
     return ['offset', 'disabled'];
@@ -52,22 +64,30 @@ export class ScrollNavbar extends HTMLElement {
 
     this.disabled = this.hasAttribute('disabled');
     const offsetAttr = this.getAttribute('offset');
-    this.offset = offsetAttr ? parseInt(offsetAttr, 10) : 0;
+    //this.offset = offsetAttr ? parseInt(offsetAttr, 10) : 0;
 
-    const shadow = this.attachShadow({ mode: 'open' });
-    shadow.innerHTML = `
+    this.shadow = this.attachShadow({ mode: 'open' });
+    this.shadow.innerHTML = `
       <style>
         :host {
           display: block;
           position: sticky;
-          top: ${this.offset}px;
+          top: var(--sticky-top, 0px);
           left: 0;
           width: 100%;
         }
       </style>
       <slot></slot>
     `;
+    this.updateStickyTop();
+  }
 
+  private updateStickyTop(){
+    this.style.setProperty('--sticky-top', `${this.totalOffset}px`);
+  }
+
+  private calculateTotalOffset(){
+    this.totalOffset = this.offset + (this.offsetElement ? this.offsetElement.clientHeight : 0);
   }
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
@@ -75,7 +95,8 @@ export class ScrollNavbar extends HTMLElement {
 
     if (name === 'offset') {
       this.offset = newValue ? parseInt(newValue, 10) : 0;
-      this.style.top = `${this.offset}px`;
+      this.calculateTotalOffset();
+      this.updateStickyTop();
     }
 
     if (name === 'disabled') {
@@ -99,12 +120,25 @@ export class ScrollNavbar extends HTMLElement {
         this.scrollParent = document;
     }
 
+    const offsetElementSelector = this.getAttribute('offset-element');
+    if(offsetElementSelector){
+      const el = document.querySelector(offsetElementSelector)
+      if(el){
+        this.offsetElement = el;
+        this.addObserverToOffsetElement()
+      }
+    }
+
     requestAnimationFrame(() => {
       this.measureNavbarHeight();
+      this.calculateTotalOffset();
+      this.updateStickyTop();
+      this.lastScroll = this.getScrollPosition();
     });
 
     this.scrollParent.addEventListener('scroll', this.handleScroll, { passive: true });
     window.addEventListener('resize', this.handleResize);
+
   }
 
   disconnectedCallback() {
@@ -114,6 +148,30 @@ export class ScrollNavbar extends HTMLElement {
     if (this.resizeTimeout) {
       clearTimeout(this.resizeTimeout);
     }
+  }
+
+  private addObserverToOffsetElement(){
+    if(this.offsetElement){
+      this.offsetElementObserver = new ResizeObserver(() =>{
+        this.handleResizeUpdate();
+      });
+
+      this.offsetElementObserver.observe(this.offsetElement)
+    }
+  }
+
+  private handleResizeUpdate() {
+    this.isResizing = true;
+    this.measureNavbarHeight();
+    this.calculateTotalOffset();
+    this.updateStickyTop();
+
+    // Update lastScroll after a short delay to ensure layout has settled
+    // and any scroll events triggered by the resize have fired
+    setTimeout(() => {
+      this.lastScroll = this.getScrollPosition();
+      this.isResizing = false;
+    }, 0);
   }
 
   private measureNavbarHeight() {
@@ -129,7 +187,7 @@ export class ScrollNavbar extends HTMLElement {
 
   private isSticky(): boolean {
     if (this.scrollParent === document) {
-      return this.getBoundingClientRect().top <= this.offset;
+      return this.getBoundingClientRect().top <= this.totalOffset;
     }
 
     const parent = this.scrollParent as Element;
@@ -140,7 +198,7 @@ export class ScrollNavbar extends HTMLElement {
     const computedStyle = window.getComputedStyle(parent);
     const borderTop = parseFloat(computedStyle.borderTopWidth) || 0;
 
-    const threshold = parentRect.top + borderTop + this.offset;
+    const threshold = parentRect.top + borderTop + this.totalOffset;
     // Use small tolerance (1px) to account for floating point precision
     return navbarRect.top <= threshold + 1;
   }
@@ -170,6 +228,10 @@ export class ScrollNavbar extends HTMLElement {
   }
 
   private handleScroll = () => {
+    if (this.isResizing) {
+      return;
+    }
+
     if (!this.ticking) {
       requestAnimationFrame(() => {
         this.calculateTranslateAmount();
@@ -183,7 +245,7 @@ export class ScrollNavbar extends HTMLElement {
   private handleResize = () => {
     if (this.resizeTimeout) clearTimeout(this.resizeTimeout);
     this.resizeTimeout = setTimeout(() => {
-      this.measureNavbarHeight();
+      this.handleResizeUpdate();
     }, 150);
   }
 }
