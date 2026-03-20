@@ -9,8 +9,9 @@ if (typeof window !== 'undefined' && typeof HTMLElement !== 'undefined') {
  * @attr {boolean} open - When present, the accordion starts in an expanded state
  * @attr {string} animation-time - Animation duration in milliseconds (default: "300")
  * @attr {string} animation-easing - CSS easing function (default: "ease")
+ * @attr {boolean} accordion-trigger - Applied to the element inside trigger-container that should toggle the accordion
  *
- * @slot trigger - The clickable element that toggles the accordion (typically a button)
+ * @slot trigger-container - Container for the trigger element(s). Use accordion-trigger attribute to specify which element toggles the accordion
  * @slot - Default slot for the accordion content
  *
  * @fires accordion-opened - Dispatched when the accordion opens (detail: { open: true })
@@ -21,15 +22,26 @@ if (typeof window !== 'undefined' && typeof HTMLElement !== 'undefined') {
  *
  * @example
  * ```html
+ * <!-- Basic usage -->
  * <accordion-item>
- *   <button slot="trigger">Click to expand</button>
+ *   <button slot="trigger-container">Click to expand</button>
  *   <div>Your content here</div>
  * </accordion-item>
  *
  * <!-- Start expanded with custom animation -->
  * <accordion-item open animation-time="500" animation-easing="ease-in-out">
- *   <button slot="trigger">Already open</button>
+ *   <button slot="trigger-container">Already open</button>
  *   <div>This content is visible by default</div>
+ * </accordion-item>
+ *
+ * <!-- Advanced: Selective trigger with multiple interactive elements -->
+ * <accordion-item>
+ *   <div slot="trigger-container" class="flex gap-2">
+ *     <button accordion-trigger class="flex-1">Expand details</button>
+ *     <button onclick="edit()">Edit</button>
+ *     <button onclick="delete()">Delete</button>
+ *   </div>
+ *   <div>Content - only the first button toggles the accordion</div>
  * </accordion-item>
  * ```
  *
@@ -49,11 +61,12 @@ if (typeof window !== 'undefined' && typeof HTMLElement !== 'undefined') {
  *
  * @note Automatically adds ARIA attributes (aria-expanded) for accessibility
  * @note Supports keyboard navigation (Enter/Space) for non-button triggers
+ * @note If no element with accordion-trigger attribute is found, the entire trigger-container will toggle the accordion
  */
 class AccordionItem extends HTMLElement{
 
     private shadow: ShadowRoot;
-    private trigger: HTMLSlotElement | null = null;
+    private triggerContainerSlot: HTMLSlotElement | null = null;
     private triggerElement: HTMLElement | null = null;
     public open = false;
     private animationTime: string;
@@ -88,10 +101,10 @@ class AccordionItem extends HTMLElement{
                     min-height: 0;
                 }
             </style>
-            <slot name="trigger"></slot>
+            <slot name="trigger-container"></slot>
             <div class="content-wrapper">
                 <div class="content-inner">
-                    <slot content></slot>
+                    <slot></slot>
                 </div>
             </div>
         `
@@ -119,36 +132,38 @@ class AccordionItem extends HTMLElement{
     }
 
     connectedCallback(){
-        this.trigger = this.shadow.querySelector('slot[name="trigger"]');
-        if(this.trigger){
-            this.trigger.addEventListener('click', this.handleTriggerClick);
-
-            // Setup accessibility for trigger element
+        this.triggerContainerSlot = this.shadow.querySelector('slot[name="trigger-container"]');
+        if(this.triggerContainerSlot){
+            // Find the element with accordion-trigger attribute
             requestAnimationFrame(() => {
-                this.setupTriggerAccessibility();
-                this.updateTriggerAccessibility();
+                this.triggerElement = this.querySelector('[accordion-trigger]');
+
+                // Fallback: if no [accordion-trigger] found, use the first slotted element
+                if(!this.triggerElement) {
+                    this.triggerElement = this.triggerContainerSlot;
+                }
+
+                if(this.triggerElement) {
+                    this.triggerElement.addEventListener('click', this.handleTriggerClick);
+                    this.setupTriggerAccessibility();
+                    this.updateTriggerAccessibility();
+                }
             });
         }
     }
 
     disconnectedCallback(){
-        if(this.trigger){
-            this.trigger.removeEventListener('click', this.handleTriggerClick);
-        }
-
-        // Cleanup keyboard listener
+        // Cleanup click and keyboard listeners
         if(this.triggerElement){
+            this.triggerElement.removeEventListener('click', this.handleTriggerClick);
             this.triggerElement.removeEventListener('keydown', this.handleKeydown);
         }
     }
 
     private setupTriggerAccessibility = () => {
-        if(!this.trigger) return;
-
-        this.triggerElement = this.trigger.assignedElements()[0] as HTMLElement;
         if(!this.triggerElement) return;
 
-        // If the slotted element is not a button, add keyboard support
+        // If the trigger element is not a button, add keyboard support
         if(this.triggerElement.tagName !== 'BUTTON' && !this.triggerElement.hasAttribute('role')) {
             this.triggerElement.setAttribute('role', 'button');
             this.triggerElement.setAttribute('tabindex', '0');
@@ -218,12 +233,8 @@ class AccordionItem extends HTMLElement{
     }
 
     private updateTriggerAccessibility = () => {
-        if(!this.trigger) return;
-
-        const triggerElement = this.trigger.assignedElements()[0] as HTMLElement;
-        if(triggerElement) {
-            triggerElement.setAttribute('aria-expanded', String(this.open));
-        }
+        if(!this.triggerElement) return;
+        this.triggerElement.setAttribute('aria-expanded', String(this.open));
     }
 }
 
