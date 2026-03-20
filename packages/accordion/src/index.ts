@@ -1,3 +1,5 @@
+/// <reference path="./jsx.d.ts" />
+
 // SSR-safe: Only define and register components in browser environment
 if (typeof window !== 'undefined' && typeof HTMLElement !== 'undefined') {
 
