@@ -29,20 +29,39 @@ export default function Accordion(){
             <!-- Standalone Accordions -->
             <h3 class="text-xl font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors">Standalone Accordions</h3>
             <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Without <code class="bg-slate-200 dark:bg-slate-700 px-1 rounded">accordion-group</code>, multiple accordions can be open at the same time:</p>
+
+            <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-500 p-4 rounded mb-4">
+                <p class="text-sm font-semibold text-blue-900 dark:text-blue-200 mb-2">💡 Advanced: Selective Trigger</p>
+                <p class="text-sm text-blue-800 dark:text-blue-300 mb-2">
+                    Use <code class="bg-blue-100 dark:bg-blue-900 px-1 py-0.5 rounded">accordion-trigger</code> attribute to specify which element triggers the accordion.
+                    Other elements in the container won't toggle it.
+                </p>
+                <p class="text-xs text-blue-700 dark:text-blue-400">
+                    Try clicking the "Edit" button below - it won't toggle the accordion!
+                </p>
+            </div>
+
             <div class="space-y-4 mb-12">
                 <accordion-item open>
-                    <button slot="trigger" class="accordion-trigger">
-                        <span>What is a web component?</span>
-                        <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                        </svg>
-                    </button>
+                    <div slot="trigger-container" class="accordion-trigger flex gap-2 items-start">
+                        <button accordion-trigger class="flex justify-between items-center flex-1 text-left">
+                            <span>What is a web component?</span>
+                            <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <button
+                            onclick="alert('Edit clicked! Notice the accordion didn\\'t toggle.')"
+                            class="px-3 py-2 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded transition-colors">
+                            Edit
+                        </button>
+                    </div>
                     <div class="accordion-content">
                         <p>Web components are a set of web platform APIs that allow you to create custom, reusable, encapsulated HTML tags to use in web pages and web apps. They work across modern browsers and can be used with any JavaScript framework or library.</p>
                         <!-- Small accordions in accordion -->
                         <accordion-group class="mt-6 border border-slate-300 dark:border-slate-600 rounded">
                             <accordion-item class="small">
-                                <button slot="trigger" class="small-trigger">
+                                <button slot="trigger-container" class="small-trigger">
                                     <span>Custom Elements</span>
                                     <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -51,7 +70,7 @@ export default function Accordion(){
                                 <div class="small-content">Custom Elements allow you to define your own HTML tags with custom behavior. They're registered using <code class="bg-slate-200 dark:bg-slate-700 px-1 rounded text-xs">customElements.define()</code> and extend <code class="bg-slate-200 dark:bg-slate-700 px-1 rounded text-xs">HTMLElement</code>.</div>
                             </accordion-item>
                             <accordion-item class="small">
-                                <button slot="trigger" class="small-trigger">
+                                <button slot="trigger-container" class="small-trigger">
                                     <span>Shadow DOM</span>
                                     <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -60,7 +79,7 @@ export default function Accordion(){
                                 <div class="small-content">Shadow DOM provides encapsulation for your component's internal structure and styling. Styles inside a shadow root don't leak out, and external styles don't leak in (unless explicitly allowed).</div>
                             </accordion-item>
                             <accordion-item class="small">
-                                <button slot="trigger" class="small-trigger">
+                                <button slot="trigger-container" class="small-trigger">
                                     <span>HTML Templates</span>
                                     <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -69,7 +88,7 @@ export default function Accordion(){
                                 <div class="small-content">The <code class="bg-slate-200 dark:bg-slate-700 px-1 rounded text-xs">&lt;template&gt;</code> element lets you declare fragments of markup that can be cloned and inserted into the document at runtime. Content inside templates isn't rendered until activated.</div>
                             </accordion-item>
                             <accordion-item class="small">
-                                <button slot="trigger" class="small-trigger">
+                                <button slot="trigger-container" class="small-trigger">
                                     <span>Slots</span>
                                     <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -82,19 +101,19 @@ export default function Accordion(){
                 </accordion-item>
 
                 <accordion-item>
-                    <button slot="trigger" class="accordion-trigger">
+                    <button slot="trigger-container" class="accordion-trigger">
                         <span>How do I use the accordion component?</span>
                         <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
                     <div class="accordion-content">
-                        Simply use the <code class="bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded">accordion-item</code> element with a trigger button using the <code class="bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded">slot="trigger"</code> attribute, and your content below it. Add the <code class="bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded">open</code> attribute to start expanded.
+                        Simply use the <code class="bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded">accordion-item</code> element with a trigger button using the <code class="bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded">slot="trigger-container"</code> attribute, and your content below it. Add the <code class="bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded">open</code> attribute to start expanded.
                     </div>
                 </accordion-item>
 
                 <accordion-item>
-                    <button slot="trigger" class="accordion-trigger">
+                    <button slot="trigger-container" class="accordion-trigger">
                         <span>Can I customize the styling?</span>
                         <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -111,7 +130,7 @@ export default function Accordion(){
             <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Inside an <code class="bg-slate-200 dark:bg-slate-700 px-1 rounded">accordion-group</code>, only one accordion can be open at a time:</p>
             <accordion-group class="space-y-4 mb-12">
                 <accordion-item open>
-                    <button slot="trigger" class="accordion-trigger">
+                    <button slot="trigger-container" class="accordion-trigger">
                         <span>Frontend Technologies</span>
                         <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -123,7 +142,7 @@ export default function Accordion(){
                 </accordion-item>
 
                 <accordion-item>
-                    <button slot="trigger" class="accordion-trigger">
+                    <button slot="trigger-container" class="accordion-trigger">
                         <span>Backend Technologies</span>
                         <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -135,7 +154,7 @@ export default function Accordion(){
                 </accordion-item>
 
                 <accordion-item>
-                    <button slot="trigger" class="accordion-trigger">
+                    <button slot="trigger-container" class="accordion-trigger">
                         <span>Database Systems</span>
                         <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -152,7 +171,7 @@ export default function Accordion(){
             <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Each <code class="bg-slate-200 dark:bg-slate-700 px-1 rounded">accordion-group</code> works independently. Opening an item here won't affect Group 1:</p>
             <accordion-group class="space-y-4">
                 <accordion-item>
-                    <button slot="trigger" class="accordion-trigger">
+                    <button slot="trigger-container" class="accordion-trigger">
                         <span>Design Principles</span>
                         <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -164,7 +183,7 @@ export default function Accordion(){
                 </accordion-item>
 
                 <accordion-item>
-                    <button slot="trigger" class="accordion-trigger">
+                    <button slot="trigger-container" class="accordion-trigger">
                         <span>Accessibility</span>
                         <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -176,7 +195,7 @@ export default function Accordion(){
                 </accordion-item>
 
                 <accordion-item>
-                    <button slot="trigger" class="accordion-trigger">
+                    <button slot="trigger-container" class="accordion-trigger">
                         <span>Performance</span>
                         <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -196,15 +215,41 @@ export default function Accordion(){
             <h3 class="text-lg font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors">Basic Accordion</h3>
             <div class="bg-slate-900 dark:bg-slate-950 rounded-lg p-6 overflow-x-auto mb-6">
                 <pre class="text-green-400 text-sm"><code>&lt;accordion-item&gt;
-  &lt;button slot="trigger"&gt;Click to expand&lt;/button&gt;
+  &lt;button slot="trigger-container"&gt;Click to expand&lt;/button&gt;
   &lt;div&gt;Your content here&lt;/div&gt;
 &lt;/accordion-item&gt;
 
 &lt;!-- Start expanded --&gt;
 &lt;accordion-item open&gt;
-  &lt;button slot="trigger"&gt;Already open&lt;/button&gt;
+  &lt;button slot="trigger-container"&gt;Already open&lt;/button&gt;
   &lt;div&gt;This content is visible by default&lt;/div&gt;
 &lt;/accordion-item&gt;</code></pre>
+            </div>
+
+            <h3 class="text-lg font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors">Advanced: Selective Trigger</h3>
+            <p class="text-slate-600 dark:text-slate-400 mb-4 transition-colors">
+                Use the <code class="bg-slate-200 dark:bg-slate-700 px-1 rounded">accordion-trigger</code> attribute to specify which element inside the trigger container should toggle the accordion. This allows you to place additional interactive elements (buttons, links, checkboxes) alongside the trigger without toggling the accordion:
+            </p>
+            <div class="bg-slate-900 dark:bg-slate-950 rounded-lg p-6 overflow-x-auto mb-4">
+                <pre class="text-green-400 text-sm"><code>&lt;accordion-item&gt;
+  &lt;div slot="trigger-container" class="flex gap-2"&gt;
+    &lt;!-- Only this button toggles the accordion --&gt;
+    &lt;button accordion-trigger class="flex-1"&gt;
+      Expand details
+    &lt;/button&gt;
+
+    &lt;!-- This button won't toggle the accordion --&gt;
+    &lt;button onclick="editItem()"&gt;Edit&lt;/button&gt;
+    &lt;button onclick="deleteItem()"&gt;Delete&lt;/button&gt;
+  &lt;/div&gt;
+
+  &lt;div&gt;Your content here&lt;/div&gt;
+&lt;/accordion-item&gt;</code></pre>
+            </div>
+            <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-400 p-4 rounded mb-6">
+                <p class="text-sm text-blue-800 dark:text-blue-200">
+                    <strong>💡 Fallback Behavior:</strong> If no element with the <code class="bg-blue-100 dark:bg-blue-900 px-1 py-0.5 rounded">accordion-trigger</code> attribute is found, the entire trigger container will toggle the accordion (backward compatible behavior).
+                </p>
             </div>
 
             <h3 class="text-lg font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors">Accordion Group (Mutual Exclusion)</h3>
@@ -214,17 +259,17 @@ export default function Accordion(){
             <div class="bg-slate-900 dark:bg-slate-950 rounded-lg p-6 overflow-x-auto mb-4">
                 <pre class="text-green-400 text-sm"><code>&lt;accordion-group&gt;
   &lt;accordion-item open&gt;
-    &lt;button slot="trigger"&gt;First Item&lt;/button&gt;
+    &lt;button slot="trigger-container"&gt;First Item&lt;/button&gt;
     &lt;div&gt;Only one item can be open at a time&lt;/div&gt;
   &lt;/accordion-item&gt;
 
   &lt;accordion-item&gt;
-    &lt;button slot="trigger"&gt;Second Item&lt;/button&gt;
+    &lt;button slot="trigger-container"&gt;Second Item&lt;/button&gt;
     &lt;div&gt;Opening this will close the first&lt;/div&gt;
   &lt;/accordion-item&gt;
 
   &lt;accordion-item&gt;
-    &lt;button slot="trigger"&gt;Third Item&lt;/button&gt;
+    &lt;button slot="trigger-container"&gt;Third Item&lt;/button&gt;
     &lt;div&gt;Same behavior here&lt;/div&gt;
   &lt;/accordion-item&gt;
 &lt;/accordion-group&gt;
@@ -246,18 +291,18 @@ export default function Accordion(){
             </p>
             <div class="bg-slate-900 dark:bg-slate-950 rounded-lg p-6 overflow-x-auto mb-4">
                 <pre class="text-green-400 text-sm"><code>/* Rotate chevron icon when accordion is open */
-accordion-item[open] [slot="trigger"] svg {
+accordion-item[open] [slot="trigger-container"] svg {
     transform: rotate(180deg);
 }
 
 /* Remove bottom border radius when open (for seamless content) */
-accordion-item[open] [slot="trigger"] {
+accordion-item[open] [slot="trigger-container"] {
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 }
 
 /* Change background color when open */
-accordion-item[open] [slot="trigger"] {
+accordion-item[open] [slot="trigger-container"] {
     background-color: #f1f5f9;
 }
 

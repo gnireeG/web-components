@@ -10,7 +10,7 @@ router-link a.active{
     @apply border-b-white dark:border-b-gray-900 border-b;
 }
 
-/* accordion-item[open] [slot="trigger"]{
+/* accordion-item[open] [slot="trigger-container"]{
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
 } */
@@ -27,15 +27,15 @@ accordion-item:not(.small)[open] .accordion-trigger{
     @apply bg-slate-50 dark:bg-slate-700;
 }
 
-accordion-item:not(.small)[open] [slot="trigger"] svg{
+accordion-item:not(.small)[open] [slot="trigger-container"] svg{
     transform: rotate(180deg);
 }
 
-accordion-item.small:not([open]) [slot="trigger"] svg{
+accordion-item.small:not([open]) [slot="trigger-container"] svg{
     transform: rotate(0deg);
 }
 
-accordion-item.small[open] [slot="trigger"] svg{
+accordion-item.small[open] [slot="trigger-container"] svg{
     transform: rotate(180deg);
 }
 
