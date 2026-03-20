@@ -38,7 +38,46 @@ export default function Accordion(){
                         </svg>
                     </button>
                     <div class="accordion-content">
-                        Web components are a set of web platform APIs that allow you to create custom, reusable, encapsulated HTML tags to use in web pages and web apps. They work across modern browsers and can be used with any JavaScript framework or library.
+                        <p>Web components are a set of web platform APIs that allow you to create custom, reusable, encapsulated HTML tags to use in web pages and web apps. They work across modern browsers and can be used with any JavaScript framework or library.</p>
+                        <!-- Small accordions in accordion -->
+                        <accordion-group class="mt-6 border border-slate-300 dark:border-slate-600 rounded">
+                            <accordion-item class="small">
+                                <button slot="trigger" class="small-trigger">
+                                    <span>Custom Elements</span>
+                                    <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                <div class="small-content">Custom Elements allow you to define your own HTML tags with custom behavior. They're registered using <code class="bg-slate-200 dark:bg-slate-700 px-1 rounded text-xs">customElements.define()</code> and extend <code class="bg-slate-200 dark:bg-slate-700 px-1 rounded text-xs">HTMLElement</code>.</div>
+                            </accordion-item>
+                            <accordion-item class="small">
+                                <button slot="trigger" class="small-trigger">
+                                    <span>Shadow DOM</span>
+                                    <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                <div class="small-content">Shadow DOM provides encapsulation for your component's internal structure and styling. Styles inside a shadow root don't leak out, and external styles don't leak in (unless explicitly allowed).</div>
+                            </accordion-item>
+                            <accordion-item class="small">
+                                <button slot="trigger" class="small-trigger">
+                                    <span>HTML Templates</span>
+                                    <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                <div class="small-content">The <code class="bg-slate-200 dark:bg-slate-700 px-1 rounded text-xs">&lt;template&gt;</code> element lets you declare fragments of markup that can be cloned and inserted into the document at runtime. Content inside templates isn't rendered until activated.</div>
+                            </accordion-item>
+                            <accordion-item class="small">
+                                <button slot="trigger" class="small-trigger">
+                                    <span>Slots</span>
+                                    <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                <div class="small-content">Slots allow you to define placeholders in your component's shadow DOM that can be filled with content from the light DOM. Named slots enable multiple insertion points with different content.</div>
+                            </accordion-item>
+                        </accordion-group>
                     </div>
                 </accordion-item>
 
