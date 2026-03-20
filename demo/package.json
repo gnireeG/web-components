@@ -11,6 +11,7 @@
     "@gnireeg/scroll-navbar": "workspace:*",
     "@gnireeg/theme-toggle": "workspace:*",
     "@gnireeg/router": "workspace:*",
+    "@gnireeg/accordion": "workspace:*",
     "@tailwindcss/vite": "^4.2.1",
     "tailwindcss": "^4.2.1"
   },

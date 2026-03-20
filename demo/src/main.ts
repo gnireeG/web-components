@@ -2,6 +2,7 @@ import '@gnireeg/scroll-navbar';
 import '@gnireeg/fly-out';
 import '@gnireeg/theme-toggle';
 import '@gnireeg/router';
+import '@gnireeg/accordion';
 
 import { RouterOutlet } from '@gnireeg/router'
 
@@ -10,6 +11,7 @@ import Flyout from './pages/flyout';
 import RouterPage from './pages/router';
 import ScrollNavbar from './pages/scrollnavbar';
 import ThemeToggle from './pages/themetoggle';
+import Accordion from './pages/accordion';
 
 const router = document.querySelector('router-outlet') as RouterOutlet;
 
@@ -54,6 +56,11 @@ router.routes = [
         name: 'themetoggle',
         path: '/theme-toggle',
         component: ThemeToggle
+    },
+    {
+        name: 'accordion',
+        path: '/accordion',
+        component: Accordion
     },
     /* {
         name: '*',

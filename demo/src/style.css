@@ -9,3 +9,28 @@ fly-out{
 router-link a.active{
     @apply border-b-white dark:border-b-gray-900 border-b;
 }
+
+accordion-item[open] [slot="trigger"] svg{
+    transform: rotate(180deg);
+}
+
+/* accordion-item[open] [slot="trigger"]{
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+} */
+
+accordion-item{
+    @apply border border-slate-200 dark:border-slate-700 rounded-lg;
+}
+
+.accordion-trigger{
+    @apply w-full text-left px-6 py-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors font-semibold text-slate-900 dark:text-slate-100 flex justify-between items-center cursor-pointer;
+}
+
+accordion-item[open] .accordion-trigger{
+    @apply bg-slate-50 dark:bg-slate-700;
+}
+
+.accordion-content{
+    @apply px-6 py-4 border border-t-0 border-slate-200 dark:border-slate-700 rounded-b-lg text-slate-600 dark:text-slate-400;
+}
