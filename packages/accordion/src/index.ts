@@ -1,3 +1,52 @@
+/**
+ * AccordionItem component - Expandable/collapsible content container with smooth animations
+ *
+ * @element accordion-item
+ *
+ * @attr {boolean} open - When present, the accordion starts in an expanded state
+ * @attr {string} animation-time - Animation duration in milliseconds (default: "300")
+ * @attr {string} animation-easing - CSS easing function (default: "ease")
+ *
+ * @slot trigger - The clickable element that toggles the accordion (typically a button)
+ * @slot - Default slot for the accordion content
+ *
+ * @fires accordion-opened - Dispatched when the accordion opens (detail: { open: true })
+ * @fires accordion-closed - Dispatched when the accordion closes (detail: { open: false })
+ *
+ * @cssprop [--animation-time] - Can be overridden via CSS custom properties
+ * @cssprop [--animation-easing] - Can be overridden via CSS custom properties
+ *
+ * @example
+ * ```html
+ * <accordion-item>
+ *   <button slot="trigger">Click to expand</button>
+ *   <div>Your content here</div>
+ * </accordion-item>
+ *
+ * <!-- Start expanded with custom animation -->
+ * <accordion-item open animation-time="500" animation-easing="ease-in-out">
+ *   <button slot="trigger">Already open</button>
+ *   <div>This content is visible by default</div>
+ * </accordion-item>
+ * ```
+ *
+ * @example
+ * ```javascript
+ * // Programmatic control
+ * const accordion = document.querySelector('accordion-item');
+ * accordion.show();     // Open
+ * accordion.close();    // Close
+ * accordion.toggle();   // Toggle state
+ *
+ * // Listen to events
+ * accordion.addEventListener('accordion-opened', (e) => {
+ *   console.log('Opened!', e.detail);
+ * });
+ * ```
+ *
+ * @note Automatically adds ARIA attributes (aria-expanded) for accessibility
+ * @note Supports keyboard navigation (Enter/Space) for non-button triggers
+ */
 export class AccordionItem extends HTMLElement{
 
     private shadow: ShadowRoot;
@@ -117,6 +166,10 @@ export class AccordionItem extends HTMLElement{
         }
     }
 
+    /**
+     * Toggles the accordion between open and closed states
+     * @public
+     */
     public toggle = () =>{
         if(this.open){
             this.close();
@@ -125,11 +178,21 @@ export class AccordionItem extends HTMLElement{
         }
     }
 
+    /**
+     * Opens the accordion
+     * @public
+     * @fires accordion-opened
+     */
     public show = () =>{
         this.open = true;
         this.reflectState();
     }
 
+    /**
+     * Closes the accordion
+     * @public
+     * @fires accordion-closed
+     */
     public close = () =>{
         this.open = false;
         this.reflectState();
@@ -161,8 +224,55 @@ export class AccordionItem extends HTMLElement{
     }
 }
 
+/**
+ * AccordionGroup component - Container for managing multiple accordion items with mutual exclusion
+ *
+ * @element accordion-group
+ *
+ * @attr {boolean} allow-multiple-open - When present, allows multiple accordions to be open simultaneously. By default, opening one accordion closes all others in the group.
+ *
+ * @example
+ * ```html
+ * <!-- Only one accordion can be open at a time -->
+ * <accordion-group>
+ *   <accordion-item open>
+ *     <button slot="trigger">First Item</button>
+ *     <div>Opening another will close this</div>
+ *   </accordion-item>
+ *
+ *   <accordion-item>
+ *     <button slot="trigger">Second Item</button>
+ *     <div>Only one can be open at a time</div>
+ *   </accordion-item>
+ *
+ *   <accordion-item>
+ *     <button slot="trigger">Third Item</button>
+ *     <div>Same behavior here</div>
+ *   </accordion-item>
+ * </accordion-group>
+ * ```
+ *
+ * @example
+ * ```html
+ * <!-- Allow multiple accordions to be open -->
+ * <accordion-group allow-multiple-open>
+ *   <accordion-item>
+ *     <button slot="trigger">First Item</button>
+ *     <div>Can be open with others</div>
+ *   </accordion-item>
+ *
+ *   <accordion-item>
+ *     <button slot="trigger">Second Item</button>
+ *     <div>Multiple can be open</div>
+ *   </accordion-item>
+ * </accordion-group>
+ * ```
+ *
+ * @note Each accordion-group works independently. Multiple groups on the same page don't affect each other.
+ * @note The group listens to 'accordion-opened' events from child accordion-item elements
+ */
 export class AccordionGroup extends HTMLElement{
-    
+
     private allowMultiple: boolean;
     private static stylesApplied = false;
     

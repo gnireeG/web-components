@@ -25,7 +25,11 @@ export default function Accordion(){
         <!-- Demo -->
         <section class="mb-12">
             <h2 class="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-4 transition-colors">Demo</h2>
-            <div class="space-y-4">
+
+            <!-- Standalone Accordions -->
+            <h3 class="text-xl font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors">Standalone Accordions</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Without <code class="bg-slate-200 dark:bg-slate-700 px-1 rounded">accordion-group</code>, multiple accordions can be open at the same time:</p>
+            <div class="space-y-4 mb-12">
                 <accordion-item open>
                     <button slot="trigger" class="accordion-trigger">
                         <span>What is a web component?</span>
@@ -62,77 +66,85 @@ export default function Accordion(){
                     </div>
                 </accordion-item>
             </div>
-            <accordion-group class="mt-16">
+
+            <!-- Accordion Group 1 -->
+            <h3 class="text-xl font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors">Accordion Group 1</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Inside an <code class="bg-slate-200 dark:bg-slate-700 px-1 rounded">accordion-group</code>, only one accordion can be open at a time:</p>
+            <accordion-group class="space-y-4 mb-12">
                 <accordion-item open>
                     <button slot="trigger" class="accordion-trigger">
-                        <span>What is a web component?</span>
+                        <span>Frontend Technologies</span>
                         <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
                     <div class="accordion-content">
-                        Web components are a set of web platform APIs that allow you to create custom, reusable, encapsulated HTML tags to use in web pages and web apps. They work across modern browsers and can be used with any JavaScript framework or library.
+                        HTML, CSS, and JavaScript form the core of frontend development. Modern frameworks like React, Vue, and Svelte build on these foundations.
                     </div>
                 </accordion-item>
 
                 <accordion-item>
                     <button slot="trigger" class="accordion-trigger">
-                        <span>How do I use the accordion component?</span>
+                        <span>Backend Technologies</span>
                         <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
                     <div class="accordion-content">
-                        Simply use the <code class="bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded">accordion-item</code> element with a trigger button using the <code class="bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded">slot="trigger"</code> attribute, and your content below it. Add the <code class="bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded">open</code> attribute to start expanded.
+                        Node.js, Python, Java, and Go are popular choices for backend development. They handle server-side logic, databases, and APIs.
                     </div>
                 </accordion-item>
 
                 <accordion-item>
                     <button slot="trigger" class="accordion-trigger">
-                        <span>Can I customize the styling?</span>
+                        <span>Database Systems</span>
                         <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
                     <div class="accordion-content">
-                        Yes! The accordion uses slots, so you have full control over the trigger button and content styling. Use any CSS framework or custom styles you prefer.
+                        SQL databases like PostgreSQL and MySQL, and NoSQL databases like MongoDB and Redis, each serve different use cases.
                     </div>
                 </accordion-item>
             </accordion-group>
-            <accordion-group class="mt-16">
-                <accordion-item open>
+
+            <!-- Accordion Group 2 -->
+            <h3 class="text-xl font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors">Accordion Group 2 (Independent)</h3>
+            <p class="text-sm text-slate-600 dark:text-slate-400 mb-4">Each <code class="bg-slate-200 dark:bg-slate-700 px-1 rounded">accordion-group</code> works independently. Opening an item here won't affect Group 1:</p>
+            <accordion-group class="space-y-4">
+                <accordion-item>
                     <button slot="trigger" class="accordion-trigger">
-                        <span>What is a web component?</span>
+                        <span>Design Principles</span>
                         <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
                     <div class="accordion-content">
-                        Web components are a set of web platform APIs that allow you to create custom, reusable, encapsulated HTML tags to use in web pages and web apps. They work across modern browsers and can be used with any JavaScript framework or library.
+                        Good design follows principles like consistency, hierarchy, contrast, and alignment. These create intuitive user experiences.
                     </div>
                 </accordion-item>
 
                 <accordion-item>
                     <button slot="trigger" class="accordion-trigger">
-                        <span>How do I use the accordion component?</span>
+                        <span>Accessibility</span>
                         <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
                     <div class="accordion-content">
-                        Simply use the <code class="bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded">accordion-item</code> element with a trigger button using the <code class="bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded">slot="trigger"</code> attribute, and your content below it. Add the <code class="bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded">open</code> attribute to start expanded.
+                        Accessible design ensures everyone can use your application, regardless of ability. This includes keyboard navigation, screen readers, and color contrast.
                     </div>
                 </accordion-item>
 
                 <accordion-item>
                     <button slot="trigger" class="accordion-trigger">
-                        <span>Can I customize the styling?</span>
+                        <span>Performance</span>
                         <svg class="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
                     <div class="accordion-content">
-                        Yes! The accordion uses slots, so you have full control over the trigger button and content styling. Use any CSS framework or custom styles you prefer.
+                        Fast applications keep users engaged. Optimize images, minimize JavaScript, lazy load resources, and use efficient rendering techniques.
                     </div>
                 </accordion-item>
             </accordion-group>
@@ -141,7 +153,9 @@ export default function Accordion(){
         <!-- Usage -->
         <section class="mb-12">
             <h2 class="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-4 transition-colors">Usage</h2>
-            <div class="bg-slate-900 dark:bg-slate-950 rounded-lg p-6 overflow-x-auto">
+
+            <h3 class="text-lg font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors">Basic Accordion</h3>
+            <div class="bg-slate-900 dark:bg-slate-950 rounded-lg p-6 overflow-x-auto mb-6">
                 <pre class="text-green-400 text-sm"><code>&lt;accordion-item&gt;
   &lt;button slot="trigger"&gt;Click to expand&lt;/button&gt;
   &lt;div&gt;Your content here&lt;/div&gt;
@@ -152,6 +166,35 @@ export default function Accordion(){
   &lt;button slot="trigger"&gt;Already open&lt;/button&gt;
   &lt;div&gt;This content is visible by default&lt;/div&gt;
 &lt;/accordion-item&gt;</code></pre>
+            </div>
+
+            <h3 class="text-lg font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors">Accordion Group (Mutual Exclusion)</h3>
+            <p class="text-slate-600 dark:text-slate-400 mb-4 transition-colors">
+                Wrap multiple <code class="bg-slate-200 dark:bg-slate-700 px-1 rounded">accordion-item</code> elements in an <code class="bg-slate-200 dark:bg-slate-700 px-1 rounded">accordion-group</code> to ensure only one can be open at a time:
+            </p>
+            <div class="bg-slate-900 dark:bg-slate-950 rounded-lg p-6 overflow-x-auto mb-4">
+                <pre class="text-green-400 text-sm"><code>&lt;accordion-group&gt;
+  &lt;accordion-item open&gt;
+    &lt;button slot="trigger"&gt;First Item&lt;/button&gt;
+    &lt;div&gt;Only one item can be open at a time&lt;/div&gt;
+  &lt;/accordion-item&gt;
+
+  &lt;accordion-item&gt;
+    &lt;button slot="trigger"&gt;Second Item&lt;/button&gt;
+    &lt;div&gt;Opening this will close the first&lt;/div&gt;
+  &lt;/accordion-item&gt;
+
+  &lt;accordion-item&gt;
+    &lt;button slot="trigger"&gt;Third Item&lt;/button&gt;
+    &lt;div&gt;Same behavior here&lt;/div&gt;
+  &lt;/accordion-item&gt;
+&lt;/accordion-group&gt;
+
+&lt;!-- Allow multiple open --&gt;
+&lt;accordion-group allow-multiple-open&gt;
+  &lt;accordion-item&gt;...&lt;/accordion-item&gt;
+  &lt;accordion-item&gt;...&lt;/accordion-item&gt;
+&lt;/accordion-group&gt;</code></pre>
             </div>
         </section>
 
@@ -270,7 +313,9 @@ accordion.addEventListener('accordion-closed', (e) => {
         <!-- Attributes -->
         <section class="mb-12">
             <h2 class="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-4 transition-colors">Attributes</h2>
-            <div class="bg-white dark:bg-slate-800 rounded-lg shadow overflow-hidden">
+
+            <h3 class="text-lg font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors">accordion-item</h3>
+            <div class="bg-white dark:bg-slate-800 rounded-lg shadow overflow-hidden mb-6">
                 <table class="w-full">
                     <thead class="bg-slate-100 dark:bg-slate-700">
                         <tr>
@@ -298,6 +343,28 @@ accordion.addEventListener('accordion-closed', (e) => {
                             <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">string</td>
                             <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">"ease"</td>
                             <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">CSS easing function. Examples: <code class="bg-slate-200 dark:bg-slate-700 px-1 rounded">ease-in-out</code>, <code class="bg-slate-200 dark:bg-slate-700 px-1 rounded">cubic-bezier(0.4, 0, 0.2, 1)</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="text-lg font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors">accordion-group</h3>
+            <div class="bg-white dark:bg-slate-800 rounded-lg shadow overflow-hidden">
+                <table class="w-full">
+                    <thead class="bg-slate-100 dark:bg-slate-700">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-slate-900 dark:text-slate-100">Attribute</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-slate-900 dark:text-slate-100">Type</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-slate-900 dark:text-slate-100">Default</th>
+                            <th class="px-6 py-3 text-left text-sm font-semibold text-slate-900 dark:text-slate-100">Description</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                        <tr>
+                            <td class="px-6 py-4 text-sm text-slate-900 dark:text-slate-100 font-mono">allow-multiple-open</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">boolean</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">false</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">When set, allows multiple accordions in the group to be open simultaneously. By default, opening one closes all others.</td>
                         </tr>
                     </tbody>
                 </table>
