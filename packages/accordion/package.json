@@ -1,6 +1,7 @@
 {
   "name": "@gnireeg/accordion",
   "version": "0.1.0",
+  "description": "Accessible accordion web component with smooth animations, keyboard support, and nested accordion groups",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -10,9 +11,29 @@
       "types": "./dist/index.d.ts"
     }
   },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "accordion",
+    "web-components",
+    "custom-elements",
+    "accessible",
+    "a11y",
+    "typescript",
+    "ui-components"
+  ],
+  "author": "Joel Geering <joel@geering.dev> (https://geering.dev)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gnireeG/web-components.git",
+    "directory": "packages/accordion"
+  },
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch"
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "typescript": "^5.4.0"
