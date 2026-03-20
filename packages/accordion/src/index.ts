@@ -1,3 +1,6 @@
+// SSR-safe: Only define and register components in browser environment
+if (typeof window !== 'undefined' && typeof HTMLElement !== 'undefined') {
+
 /**
  * AccordionItem component - Expandable/collapsible content container with smooth animations
  *
@@ -47,7 +50,7 @@
  * @note Automatically adds ARIA attributes (aria-expanded) for accessibility
  * @note Supports keyboard navigation (Enter/Space) for non-button triggers
  */
-export class AccordionItem extends HTMLElement{
+class AccordionItem extends HTMLElement{
 
     private shadow: ShadowRoot;
     private trigger: HTMLSlotElement | null = null;
@@ -271,11 +274,11 @@ export class AccordionItem extends HTMLElement{
  * @note Each accordion-group works independently. Multiple groups on the same page don't affect each other.
  * @note The group listens to 'accordion-opened' events from child accordion-item elements
  */
-export class AccordionGroup extends HTMLElement{
+class AccordionGroup extends HTMLElement{
 
     private allowMultiple: boolean;
     private static stylesApplied = false;
-    
+
     constructor(){
         super();
         if (!AccordionGroup.stylesApplied) {
@@ -326,5 +329,8 @@ export class AccordionGroup extends HTMLElement{
 
 }
 
+// Register custom elements
 customElements.define('accordion-item', AccordionItem);
 customElements.define('accordion-group', AccordionGroup);
+
+}
