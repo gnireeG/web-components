@@ -1,6 +1,6 @@
 {
   "name": "@gnireeg/accordion",
-  "version": "0.1.2",
+  "version": "0.1.5",
   "description": "Accessible accordion web component with smooth animations, keyboard support, and nested accordion groups",
   "type": "module",
   "main": "./dist/index.js",
@@ -10,9 +10,6 @@
       "types": "./dist/index.d.ts",
       "node": "./dist/index.js",
       "default": "./dist/index.js"
-    },
-    "./jsx": {
-      "types": "./dist/jsx.d.ts"
     }
   },
   "files": [
