@@ -29,16 +29,39 @@ npm install @gnireeg/accordion
 </script>
 
 <accordion-item>
-  <button slot="trigger">Click to expand</button>
+  <button slot="trigger-container">Click to expand</button>
   <div>Your content here</div>
 </accordion-item>
 
 <!-- Start expanded -->
 <accordion-item open>
-  <button slot="trigger">Already open</button>
+  <button slot="trigger-container">Already open</button>
   <div>This content is visible by default</div>
 </accordion-item>
 ```
+
+### Selective Trigger (Advanced)
+
+Use the `accordion-trigger` attribute to specify which element should toggle the accordion. This allows you to place additional interactive elements alongside the trigger:
+
+```html
+<accordion-item>
+  <div slot="trigger-container" class="flex gap-2">
+    <!-- Only this button toggles the accordion -->
+    <button accordion-trigger class="flex-1">
+      Expand details
+    </button>
+
+    <!-- These buttons won't toggle the accordion -->
+    <button onclick="edit()">Edit</button>
+    <button onclick="delete()">Delete</button>
+  </div>
+
+  <div>Your content here</div>
+</accordion-item>
+```
+
+> **Note:** If no element with the `accordion-trigger` attribute is found, the entire trigger container will toggle the accordion (backward compatible behavior).
 
 ### Accordion Group (Mutual Exclusion)
 
@@ -47,17 +70,17 @@ Wrap multiple accordion items in an `accordion-group` to ensure only one can be 
 ```html
 <accordion-group>
   <accordion-item open>
-    <button slot="trigger">First Item</button>
+    <button slot="trigger-container">First Item</button>
     <div>Only one item can be open at a time</div>
   </accordion-item>
 
   <accordion-item>
-    <button slot="trigger">Second Item</button>
+    <button slot="trigger-container">Second Item</button>
     <div>Opening this will close the first</div>
   </accordion-item>
 
   <accordion-item>
-    <button slot="trigger">Third Item</button>
+    <button slot="trigger-container">Third Item</button>
     <div>Same behavior here</div>
   </accordion-item>
 </accordion-group>
@@ -67,7 +90,7 @@ Wrap multiple accordion items in an `accordion-group` to ensure only one can be 
 
 ```html
 <accordion-item animation-time="500" animation-easing="ease-in-out">
-  <button slot="trigger">Slow animation</button>
+  <button slot="trigger-container">Slow animation</button>
   <div>This opens and closes slower</div>
 </accordion-item>
 ```
@@ -112,7 +135,7 @@ accordion.addEventListener('accordion-closed', (e) => {
 
 | Slot | Description |
 |------|-------------|
-| `trigger` | The clickable element that toggles the accordion (typically a button) |
+| `trigger-container` | Container for the trigger element(s). Use `accordion-trigger` attribute to specify which element toggles the accordion |
 | (default) | The accordion content |
 
 #### Methods
@@ -146,12 +169,12 @@ Use the `[open]` attribute selector to style accordion items when expanded:
 
 ```css
 /* Rotate chevron icon when accordion is open */
-accordion-item[open] [slot="trigger"] svg {
+accordion-item[open] [slot="trigger-container"] svg {
   transform: rotate(180deg);
 }
 
 /* Change background color when open */
-accordion-item[open] [slot="trigger"] {
+accordion-item[open] [slot="trigger-container"] {
   background-color: #f1f5f9;
 }
 
