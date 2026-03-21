@@ -42,7 +42,7 @@ export default function Flyout(){
 &lt;fly-out
     name="modal"
     position="bottom"
-    disable-lock-scroll
+    disable-scroll-lock
     disable-click-outside
 &gt;
     Content...
@@ -63,15 +63,15 @@ export default function Flyout(){
                 </fly-out-toggle>
 
                 <fly-out-toggle name="demo-top" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium cursor-pointer transition-colors text-center">
-                    Open Top
+                    Open Top (no background)
                 </fly-out-toggle>
 
                 <fly-out-toggle name="demo-left" class="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-medium cursor-pointer transition-colors text-center">
-                    Open Left
+                    Open Left (no scroll lock)
                 </fly-out-toggle>
 
                 <fly-out-toggle name="demo-right" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-medium cursor-pointer transition-colors text-center">
-                    Open Right
+                    Open Right (no click outside)
                 </fly-out-toggle>
             </div>
         </section>
@@ -105,7 +105,7 @@ export default function Flyout(){
                             <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Edge from which the fly-out slides in</td>
                         </tr>
                         <tr>
-                            <td class="px-6 py-4 text-sm text-slate-900 dark:text-slate-100 font-mono">disable-lock-scroll</td>
+                            <td class="px-6 py-4 text-sm text-slate-900 dark:text-slate-100 font-mono">disable-scroll-lock</td>
                             <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">boolean</td>
                             <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">false</td>
                             <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Prevents body scroll locking when fly-out is open</td>
@@ -199,7 +199,7 @@ export default function Flyout(){
     </div>
   </fly-out>
 
-  <fly-out name="demo-top" position="top" class="bg-gradient-to-b from-green-600 to-green-700 w-screen shadow-2xl">
+  <fly-out name="demo-top" disable-background position="top" class="bg-gradient-to-b from-green-600 to-green-700 w-screen shadow-2xl">
     <div class="p-8 max-w-2xl mx-auto text-white">
       <h3 class="text-2xl font-bold mb-4">Top Fly Out</h3>
       <p class="mb-6 text-green-100">
@@ -209,7 +209,7 @@ export default function Flyout(){
     </div>
   </fly-out>
 
-  <fly-out name="demo-left" position="left" class="bg-white dark:bg-slate-800 h-screen shadow-2xl" style="width: 400px; max-width: 90vw;">
+  <fly-out name="demo-left" disable-scroll-lock position="left" class="bg-white dark:bg-slate-800 h-screen shadow-2xl" style="width: 400px; max-width: 90vw;">
     <div class="p-8 h-full flex flex-col">
       <h3 class="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-4 transition-colors">Left Fly Out</h3>
       <p class="text-slate-600 dark:text-slate-400 mb-6 transition-colors">
@@ -224,7 +224,7 @@ export default function Flyout(){
     </div>
   </fly-out>
 
-  <fly-out name="demo-right" position="right" class="bg-gradient-to-l from-purple-600 to-pink-600 h-screen shadow-2xl" style="width: 400px; max-width: 90vw;">
+  <fly-out name="demo-right" disable-click-outside position="right" class="bg-gradient-to-l from-purple-600 to-pink-600 h-screen shadow-2xl" style="width: 400px; max-width: 90vw;">
     <div class="p-8 h-full flex flex-col text-white">
       <h3 class="text-2xl font-bold mb-4">Right Fly Out</h3>
       <p class="mb-6 text-purple-100">
@@ -240,7 +240,7 @@ export default function Flyout(){
           <p class="text-sm text-purple-100">New message received.</p>
         </div>
       </div>
-      <fly-out-toggle name="flyout-right"><button class="px-6 py-3 bg-white text-purple-600 rounded-lg hover:bg-purple-50 font-medium w-full cursor-pointer">Close</button></fly-out-toggle>
+      <fly-out-toggle name="demo-right"><button class="px-6 py-3 bg-white text-purple-600 rounded-lg hover:bg-purple-50 font-medium w-full cursor-pointer">Close</button></fly-out-toggle>
     </div>
   </fly-out>
     `;

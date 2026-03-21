@@ -5,8 +5,9 @@
  *
  * @attr {string} name - Required. Unique identifier for this fly-out
  * @attr {('bottom'|'top'|'left'|'right')} [position='bottom'] - Edge from which the fly-out slides in
- * @attr {boolean} [disable-lock-scroll] - Prevents body scroll locking when fly-out is open
+ * @attr {boolean} [disable-scroll-lock] - Prevents body scroll locking when fly-out is open
  * @attr {boolean} [disable-click-outside] - Prevents closing when clicking outside the fly-out
+ * @attr {boolean} [disable-background] - Disables the background overlay when fly-out is open
  *
  * @fires fly-out-opened - Dispatched when the fly-out opens. Detail: { name: string }
  * @fires fly-out-closed - Dispatched when the fly-out closes. Detail: { name: string }
@@ -28,10 +29,14 @@ export class FlyOut extends HTMLElement {
   private position: "bottom" | "top" | "left" | "right" = "bottom";
   private show = false;
   private shadow: ShadowRoot;
-  private disableLockScroll = false;
+  private disableScrollLock = false;
   private disableClickOutside = false;
+  private disableBackground = false;
   private previouslyFocusedElement: HTMLElement | null = null;
   private focusableElements: HTMLElement[] = [];
+  private static stylesApplied = false;
+  private static backgroundElement: HTMLElement | null = null;
+  private static openFlyOuts = 0;
 
   constructor() {
     super();
@@ -44,8 +49,9 @@ export class FlyOut extends HTMLElement {
       );
     }
 
-    this.disableLockScroll = this.hasAttribute("disable-lock-scroll");
+    this.disableScrollLock = this.hasAttribute("disable-scroll-lock");
     this.disableClickOutside = this.hasAttribute("disable-click-outside");
+    this.disableBackground = this.hasAttribute("disable-background");
     const posAttr = this.getAttribute("position");
 
     if (
@@ -73,9 +79,10 @@ export class FlyOut extends HTMLElement {
                     position: fixed;
                     ${styles.positioning}
                     transform: ${styles.closedTransform};
+                    z-index: 1000;
                 }
                 :host(.ready){
-                    transition: transform 0.2s ease-out;
+                    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
                 }
                 :host(.open){
                     transform: ${styles.openTransform};
@@ -83,6 +90,40 @@ export class FlyOut extends HTMLElement {
             </style>
             <slot></slot>
         `;
+
+    if (!FlyOut.stylesApplied) {
+      const sheet = new CSSStyleSheet();
+      sheet.replaceSync(`
+        .fly-out-background {
+          width: 100vw;
+          height: 100vh;
+          background-color: rgba(0,0,0,0.5);
+          position: fixed;
+          top: 0;
+          left: 0;
+          z-index: 999;
+          backdrop-filter: blur(3px);
+          -webkit-backdrop-filter: blur(3px);
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.2s ease-out;
+        }
+        .fly-out-background.show {
+          opacity: 1;
+          pointer-events: auto;
+        }
+      `);
+      document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
+      FlyOut.stylesApplied = true;
+    }
+
+    // Create shared background element once
+    if (!FlyOut.backgroundElement) {
+      const background = document.createElement('div');
+      background.classList.add('fly-out-background');
+      document.body.appendChild(background);
+      FlyOut.backgroundElement = background;
+    }
   }
 
   private getPositionStyles() {
@@ -164,7 +205,15 @@ export class FlyOut extends HTMLElement {
     this.previouslyFocusedElement = document.activeElement as HTMLElement;
 
     this.classList.add("open");
-    if (!this.disableLockScroll) document.body.style.overflow = "hidden";
+    if (!this.disableScrollLock) document.body.style.overflow = "hidden";
+
+    // Show background when first fly-out opens (unless disabled)
+    if (!this.disableBackground) {
+      FlyOut.openFlyOuts++;
+      if (FlyOut.openFlyOuts === 1 && FlyOut.backgroundElement) {
+        FlyOut.backgroundElement.classList.add("show");
+      }
+    }
 
     document.addEventListener("keydown", this.handleKeyDown);
 
@@ -194,7 +243,15 @@ export class FlyOut extends HTMLElement {
   public close() {
     this.show = false;
     this.classList.remove("open");
-    if (!this.disableLockScroll) document.body.style.overflow = "";
+    if (!this.disableScrollLock) document.body.style.overflow = "";
+
+    // Hide background when last fly-out closes (unless disabled)
+    if (!this.disableBackground) {
+      FlyOut.openFlyOuts--;
+      if (FlyOut.openFlyOuts === 0 && FlyOut.backgroundElement) {
+        FlyOut.backgroundElement.classList.remove("show");
+      }
+    }
 
     document.removeEventListener("keydown", this.handleKeyDown);
 
@@ -255,8 +312,15 @@ export class FlyOut extends HTMLElement {
     }
   };
 
+  private handleBackgroundClick = () => {
+    if (this.show && !this.disableClickOutside) {
+      this.close();
+    }
+  }
+
   connectedCallback() {
     document.addEventListener("toggle-fly-out", this.handleToggleFlyOut);
+    FlyOut.backgroundElement?.addEventListener('click', this.handleBackgroundClick);
     if (!this.disableClickOutside) {
       document.addEventListener("click", this.handleClickOutside);
     }
@@ -267,11 +331,12 @@ export class FlyOut extends HTMLElement {
 
   disconnectedCallback() {
     document.removeEventListener("toggle-fly-out", this.handleToggleFlyOut);
+    FlyOut.backgroundElement?.removeEventListener('click', this.handleBackgroundClick);
     if (!this.disableClickOutside) {
       document.removeEventListener("click", this.handleClickOutside);
     }
     // Cleanup falls FlyOut offen war:
-    if (this.show && !this.disableLockScroll) {
+    if (this.show && !this.disableScrollLock) {
       document.body.style.overflow = "";
     }
   }
