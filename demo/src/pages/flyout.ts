@@ -116,6 +116,12 @@ export default function Flyout(){
                             <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">false</td>
                             <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Prevents closing when clicking outside the fly-out</td>
                         </tr>
+                        <tr>
+                            <td class="px-6 py-4 text-sm text-slate-900 dark:text-slate-100 font-mono">disable-background</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">boolean</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">false</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Disables the background overlay when fly-out is open</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

@@ -1,19 +1,53 @@
 {
   "name": "@gnireeg/fly-out",
-  "version": "0.1.0",
+  "version": "0.1.1",
+  "description": "Accessible fly-out web component with smooth animations, keyboard support, and background overlay",
   "type": "module",
+
   "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/types-entry.d.ts",
+
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/types-entry.d.ts",
+      "default": "./dist/index.js"
     }
   },
-  "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch"
+
+  "files": [
+    "dist",
+    "README.md"
+  ],
+
+  "keywords": [
+    "fly-out",
+    "flyout",
+    "slide-in",
+    "panel",
+    "drawer",
+    "web-components",
+    "custom-elements",
+    "accessible",
+    "a11y",
+    "typescript",
+    "ui-components"
+  ],
+
+  "author": "Joel Geering <joel@geering.dev> (https://geering.dev)",
+  "license": "MIT",
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gnireeG/web-components.git",
+    "directory": "packages/fly-out"
   },
+
+  "scripts": {
+    "build": "tsc && node -e \"const fs = require('fs'); fs.copyFileSync('src/jsx.d.ts', 'dist/jsx.d.ts'); fs.copyFileSync('src/types-entry.d.ts', 'dist/types-entry.d.ts');\"",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+
   "devDependencies": {
     "typescript": "^5.4.0"
   }

@@ -1,3 +1,16 @@
+// Export types for consumers
+export type {
+  FlyOutElement,
+  FlyOutToggleElement,
+  FlyOutEventDetail,
+  FlyOutStateChangeDetail,
+  FlyOutAttributes,
+  FlyOutToggleAttributes,
+} from './types';
+
+// SSR-safe: Only define and register components in browser environment
+if (typeof window !== 'undefined' && typeof HTMLElement !== 'undefined') {
+
 /**
  * FlyOut component - A slide-in panel that can appear from any edge of the screen
  *
@@ -24,7 +37,7 @@
  * If you override the `transition` property, you'll need to manually include the fly-out animation
  * by adding `transform` to your transition (e.g., `transition: transform 0.2s, color 0.2s`).
  */
-export class FlyOut extends HTMLElement {
+class FlyOut extends HTMLElement {
   private name: string | null = null;
   private position: "bottom" | "top" | "left" | "right" = "bottom";
   private show = false;
@@ -360,7 +373,7 @@ export class FlyOut extends HTMLElement {
  * </fly-out>
  * ```
  */
-export class FlyOutToggle extends HTMLElement {
+class FlyOutToggle extends HTMLElement {
   private flyOutName: string | null = null;
 
   constructor() {
@@ -403,5 +416,8 @@ export class FlyOutToggle extends HTMLElement {
   }
 }
 
+// Register custom elements
 customElements.define("fly-out", FlyOut);
 customElements.define("fly-out-toggle", FlyOutToggle);
+
+}
