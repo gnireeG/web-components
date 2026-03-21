@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@gnireeg/fly-out": "workspace:*",
-    "@gnireeg/scroll-navbar": "workspace:*",
+    "@gnireeg/float-bar": "workspace:*",
     "@gnireeg/theme-toggle": "workspace:*",
     "@gnireeg/router": "workspace:*",
     "@gnireeg/accordion": "workspace:*",

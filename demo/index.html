@@ -16,20 +16,20 @@
   </div>
 
   <!-- Main Scroll Navbar (window scroll) -->
-  <scroll-navbar offset-element="#subnav" class="w-full bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900 px-6 py-4 z-10 shadow-md transition-colors">
+  <float-bar offset-element="#subnav" class="w-full bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900 px-6 py-4 z-10 shadow-md transition-colors">
     <div class="flex items-center justify-between">
       <h1 class="text-xl font-bold">Main Navigation</h1>
       <nav class="flex gap-6 items-center">
         <router-link to="home">Home</router-link>
         <router-link to="flyout">Flyout</router-link>
-        <router-link to="scrollnavbar">Scroll-Navbar</router-link>
+        <router-link to="floatbar">Float-bar</router-link>
         <router-link to="router">Router</router-link>
         <router-link to="themetoggle">Theme</router-link>
         <router-link to="accordion">Accordion</router-link>
         <theme-toggle></theme-toggle>
       </nav>
     </div>
-  </scroll-navbar>
+  </float-bar>
 
   <router-outlet></router-outlet>
 

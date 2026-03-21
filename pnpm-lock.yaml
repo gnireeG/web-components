@@ -17,15 +17,15 @@ importers:
       '@gnireeg/accordion':
         specifier: workspace:*
         version: link:../packages/accordion
+      '@gnireeg/float-bar':
+        specifier: workspace:*
+        version: link:../packages/float-bar
       '@gnireeg/fly-out':
         specifier: workspace:*
         version: link:../packages/fly-out
       '@gnireeg/router':
         specifier: workspace:*
         version: link:../packages/router
-      '@gnireeg/scroll-navbar':
-        specifier: workspace:*
-        version: link:../packages/scroll-navbar
       '@gnireeg/theme-toggle':
         specifier: workspace:*
         version: link:../packages/theme-toggle
@@ -49,6 +49,12 @@ importers:
         specifier: ^5.4.0
         version: 5.9.3
 
+  packages/float-bar:
+    devDependencies:
+      typescript:
+        specifier: ^5.4.0
+        version: 5.9.3
+
   packages/fly-out:
     devDependencies:
       typescript:
@@ -56,12 +62,6 @@ importers:
         version: 5.9.3
 
   packages/router:
-    devDependencies:
-      typescript:
-        specifier: ^5.4.0
-        version: 5.9.3
-
-  packages/scroll-navbar:
     devDependencies:
       typescript:
         specifier: ^5.4.0
