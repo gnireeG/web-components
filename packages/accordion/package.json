@@ -1,29 +1,24 @@
 {
   "name": "@gnireeg/accordion",
-  "version": "0.1.11",
+  "version": "0.1.17",
   "description": "Accessible accordion web component with smooth animations, keyboard support, and nested accordion groups",
   "type": "module",
+
   "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "typesVersions": {
-    "*": {
-      "*": ["dist/index.d.ts"]
-    }
-  },
+  "types": "./dist/types-entry.d.ts",
+
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "node": "./dist/index.js",
+      "types": "./dist/types-entry.d.ts",
       "default": "./dist/index.js"
-    },
-    "./jsx": {
-      "types": "./dist/jsx.d.ts"
     }
   },
+
   "files": [
     "dist",
     "README.md"
   ],
+
   "keywords": [
     "accordion",
     "web-components",
@@ -33,18 +28,22 @@
     "typescript",
     "ui-components"
   ],
+
   "author": "Joel Geering <joel@geering.dev> (https://geering.dev)",
   "license": "MIT",
+
   "repository": {
     "type": "git",
     "url": "https://github.com/gnireeG/web-components.git",
     "directory": "packages/accordion"
   },
+
   "scripts": {
-    "build": "tsc && node -e \"const fs = require('fs'); fs.copyFileSync('src/jsx.d.ts', 'dist/jsx.d.ts'); fs.copyFileSync('src/types.ts', 'dist/types.d.ts');\"",
+    "build": "tsc && node -e \"const fs = require('fs'); fs.copyFileSync('src/jsx.d.ts', 'dist/jsx.d.ts'); fs.copyFileSync('src/types-entry.d.ts', 'dist/types-entry.d.ts');\"",
     "dev": "tsc --watch",
     "prepublishOnly": "npm run build"
   },
+
   "devDependencies": {
     "typescript": "^5.4.0"
   }

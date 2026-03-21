@@ -7,9 +7,6 @@ export type {
   AccordionGroupAttributes,
 } from './types';
 
-// Import JSX type augmentation so it's automatically available to consumers
-import './jsx';
-
 // SSR-safe: Only define and register components in browser environment
 if (typeof window !== 'undefined' && typeof HTMLElement !== 'undefined') {
 
@@ -26,8 +23,10 @@ if (typeof window !== 'undefined' && typeof HTMLElement !== 'undefined') {
  * @slot trigger-container - Container for the trigger element(s). Use accordion-trigger attribute to specify which element toggles the accordion
  * @slot - Default slot for the accordion content
  *
- * @fires accordion-opened - Dispatched when the accordion opens (detail: { open: true })
- * @fires accordion-closed - Dispatched when the accordion closes (detail: { open: false })
+ * @fires accordion-opened - Dispatched when the accordion opens (detail: { open: true }) - Vanilla JS convention
+ * @fires AccordionOpened - Same as accordion-opened, for React compatibility
+ * @fires accordion-closed - Dispatched when the accordion closes (detail: { open: false }) - Vanilla JS convention
+ * @fires AccordionClosed - Same as accordion-closed, for React compatibility
  *
  * @cssprop [--animation-time] - Can be overridden via CSS custom properties
  * @cssprop [--animation-easing] - Can be overridden via CSS custom properties
@@ -212,6 +211,7 @@ class AccordionItem extends HTMLElement{
      * Opens the accordion
      * @public
      * @fires accordion-opened
+     * @fires AccordionOpened
      */
     public show = () =>{
         this.open = true;
@@ -222,6 +222,7 @@ class AccordionItem extends HTMLElement{
      * Closes the accordion
      * @public
      * @fires accordion-closed
+     * @fires AccordionClosed
      */
     public close = () =>{
         this.open = false;
@@ -236,12 +237,18 @@ class AccordionItem extends HTMLElement{
     }
 
     private dispatchStateEvent = () => {
-        // Dispatch custom events
-        this.dispatchEvent(new CustomEvent(this.open ? 'accordion-opened' : 'accordion-closed', {
+        // Dispatch custom events (both naming conventions for compatibility)
+        const eventDetail = {
             bubbles: true,
             composed: true,
             detail: { open: this.open }
-        }));
+        };
+
+        // Vanilla JS / Web Standards convention (lowercase with hyphens)
+        this.dispatchEvent(new CustomEvent(this.open ? 'accordion-opened' : 'accordion-closed', eventDetail));
+
+        // React convention (camelCase)
+        this.dispatchEvent(new CustomEvent(this.open ? 'AccordionOpened' : 'AccordionClosed', eventDetail));
     }
 
     private updateTriggerAccessibility = () => {
@@ -333,10 +340,11 @@ class AccordionGroup extends HTMLElement{
     }
 
     connectedCallback(){
-        this.addEventListener('accordion-opened', this.handleAccordionOpened)
+        // Only listen to one event to avoid duplicate handling
+        this.addEventListener('accordion-opened', this.handleAccordionOpened);
     }
     disconnectedCallback(){
-        this.removeEventListener('accordion-opened', this.handleAccordionOpened)
+        this.removeEventListener('accordion-opened', this.handleAccordionOpened);
     }
 
     private handleAccordionOpened = (e: Event) =>{

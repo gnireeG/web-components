@@ -76,22 +76,18 @@ export interface AccordionItemAttributes {
   id?: string;
 
   /**
-   * Event handler for accordion-opened event
-   * Fired when the accordion opens
+   * Event handler for when the accordion opens
+   * React: Use onAccordionOpened
+   * Vanilla JS: addEventListener('accordion-opened', ...)
    */
   onAccordionOpened?: (event: CustomEvent<AccordionEventDetail>) => void;
 
   /**
-   * Event handler for accordion-closed event
-   * Fired when the accordion closes
+   * Event handler for when the accordion closes
+   * React: Use onAccordionClosed
+   * Vanilla JS: addEventListener('accordion-closed', ...)
    */
   onAccordionClosed?: (event: CustomEvent<AccordionEventDetail>) => void;
-
-  /**
-   * Legacy event handler naming (lowercase)
-   */
-  'onaccordion-opened'?: (event: CustomEvent<AccordionEventDetail>) => void;
-  'onaccordion-closed'?: (event: CustomEvent<AccordionEventDetail>) => void;
 }
 
 /**
