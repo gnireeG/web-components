@@ -1,3 +1,15 @@
+// Export types for consumers
+export type {
+  AccordionItemElement,
+  AccordionGroupElement,
+  AccordionEventDetail,
+  AccordionItemAttributes,
+  AccordionGroupAttributes,
+} from './types';
+
+// Import JSX type augmentation so it's automatically available to consumers
+import './jsx';
+
 // SSR-safe: Only define and register components in browser environment
 if (typeof window !== 'undefined' && typeof HTMLElement !== 'undefined') {
 
