@@ -17,6 +17,12 @@ declare global {
       'accordion-group': AccordionGroupAttributes;
     }
   }
+  namespace React.JSX {
+    interface IntrinsicElements {
+      'accordion-item': AccordionItemAttributes;
+      'accordion-group': AccordionGroupAttributes;
+    }
+  }
 }
 
 // This export is required to make this file a module
