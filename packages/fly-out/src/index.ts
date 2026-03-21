@@ -76,10 +76,6 @@ class FlyOut extends HTMLElement {
       this.position = posAttr;
     }
 
-    this.setAttribute("role", "dialog");
-    this.setAttribute("aria-modal", "true");
-    if (this.name) this.setAttribute("id", this.name);
-
     this.render();
   }
 
@@ -332,6 +328,9 @@ class FlyOut extends HTMLElement {
   }
 
   connectedCallback() {
+    this.setAttribute("role", "dialog");
+    this.setAttribute("aria-modal", "true");
+    if (this.name) this.setAttribute("id", this.name);
     document.addEventListener("toggle-fly-out", this.handleToggleFlyOut);
     FlyOut.backgroundElement?.addEventListener('click', this.handleBackgroundClick);
     if (!this.disableClickOutside) {
