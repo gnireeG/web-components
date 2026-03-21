@@ -1,4 +1,4 @@
-import '@gnireeg/scroll-navbar';
+import '@gnireeg/float-bar';
 import '@gnireeg/fly-out';
 import '@gnireeg/theme-toggle';
 import '@gnireeg/router';
@@ -9,7 +9,7 @@ import { RouterOutlet } from '@gnireeg/router'
 import HomePage from './pages/home';
 import Flyout from './pages/flyout';
 import RouterPage from './pages/router';
-import ScrollNavbar from './pages/scrollnavbar';
+import FloatBar from './pages/floatbar';
 import ThemeToggle from './pages/themetoggle';
 import Accordion from './pages/accordion';
 
@@ -38,9 +38,9 @@ router.routes = [
         component: Flyout
     },
     {
-        name: 'scrollnavbar',
-        path: '/scroll-navbar',
-        component: ScrollNavbar
+        name: 'floatbar',
+        path: '/float-bar',
+        component: FloatBar
     },
     {
         name: 'router',

@@ -1,5 +1,14 @@
+// Export types for consumers
+export type {
+  FloatBarElement,
+  FloatBarAttributes,
+} from './types';
+
+// SSR-safe: Only define and register components in browser environment
+if (typeof window !== 'undefined' && typeof HTMLElement !== 'undefined') {
+
 /**
- * A navbar component that automatically hides when scrolling down and shows when scrolling up.
+ * A floating bar component with scroll spy, automatic positioning, and sticky behavior.
  *
  * Works with both window scroll and container scroll. The scroll container is automatically
  * detected based on the element's offsetParent. If offsetParent is null or document.body,
@@ -8,39 +17,39 @@
  *
  * @example
  * <!-- Window scroll -->
- * <scroll-navbar>
- *   <nav>Your navbar content</nav>
- * </scroll-navbar>
+ * <float-bar>
+ *   <nav>Your navigation content</nav>
+ * </float-bar>
  *
  * @example
  * <!-- Container scroll -->
  * <div style="position: relative; overflow: auto; height: 500px;">
- *   <scroll-navbar>
- *     <nav>Your navbar content</nav>
- *   </scroll-navbar>
+ *   <float-bar>
+ *     <nav>Your navigation content</nav>
+ *   </float-bar>
  *   <div>Scrollable content...</div>
  * </div>
  *
  * @example
  * <!-- With offset (e.g., when a fixed header is above) -->
- * <scroll-navbar offset="80">
- *   <nav>Your navbar content</nav>
- * </scroll-navbar>
+ * <float-bar offset="80">
+ *   <nav>Your navigation content</nav>
+ * </float-bar>
  *
  * @example
  * <!-- With offset-element (automatically uses another element's height as offset) -->
  * <header id="top-header">Fixed header</header>
- * <scroll-navbar offset-element="#top-header">
- *   <nav>Your navbar content</nav>
- * </scroll-navbar>
+ * <float-bar offset-element="#top-header">
+ *   <nav>Your navigation content</nav>
+ * </float-bar>
  *
  * @example
- * <!-- Disabled (navbar scrolls normally without hiding) -->
- * <scroll-navbar disabled>
- *   <nav>Your navbar content</nav>
- * </scroll-navbar>
+ * <!-- Disabled (bar scrolls normally without hiding) -->
+ * <float-bar disabled>
+ *   <nav>Your navigation content</nav>
+ * </float-bar>
  */
-export class ScrollNavbar extends HTMLElement {
+class FloatBar extends HTMLElement {
   private lastScroll = 0;
   private translateAmount = 0;
   private navbarHeight = 0;
@@ -250,4 +259,7 @@ export class ScrollNavbar extends HTMLElement {
   }
 }
 
-customElements.define('scroll-navbar', ScrollNavbar);
+// Register custom element
+customElements.define('float-bar', FloatBar);
+
+}

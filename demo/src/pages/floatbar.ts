@@ -1,10 +1,10 @@
-export default function ScrollNavbar(){
+export default function FloatBar(){
     const el = document.createElement('div');
     el.className = 'max-w-6xl mx-auto px-6 py-12';
     el.innerHTML = /*HTML*/`
-        <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4 transition-colors">Scroll Navbar</h1>
+        <h1 class="text-4xl font-bold text-slate-900 dark:text-slate-100 mb-4 transition-colors">Float Bar</h1>
         <p class="text-lg text-slate-600 dark:text-slate-400 mb-8 transition-colors">
-            A navigation bar that automatically hides when scrolling down and reveals when scrolling up.
+            A floating bar component with scroll spy, automatic positioning, and sticky behavior.
         </p>
 
         <!-- Features -->
@@ -24,20 +24,20 @@ export default function ScrollNavbar(){
             <h2 class="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-4 transition-colors">Usage</h2>
             <div class="bg-slate-900 dark:bg-slate-950 rounded-lg p-6 overflow-x-auto">
                 <pre class="text-green-400 text-sm"><code>&lt;!-- Window scroll example --&gt;
-&lt;scroll-navbar class="bg-slate-800 text-white px-6 py-4"&gt;
+&lt;float-bar class="bg-slate-800 text-white px-6 py-4"&gt;
     &lt;nav&gt;Your navigation content&lt;/nav&gt;
-&lt;/scroll-navbar&gt;
+&lt;/float-bar&gt;
 
 &lt;!-- With offset (e.g., for sticky header) --&gt;
-&lt;scroll-navbar offset="60" class="..."&gt;
+&lt;float-bar offset="60" class="..."&gt;
     &lt;nav&gt;Your navigation content&lt;/nav&gt;
-&lt;/scroll-navbar&gt;
+&lt;/float-bar&gt;
 
 &lt;!-- Container scroll example --&gt;
 &lt;div class="h-64 overflow-y-auto"&gt;
-    &lt;scroll-navbar class="..."&gt;
-        &lt;nav&gt;Container navbar&lt;/nav&gt;
-    &lt;/scroll-navbar&gt;
+    &lt;float-bar class="..."&gt;
+        &lt;nav&gt;Container bar&lt;/nav&gt;
+    &lt;/float-bar&gt;
     &lt;!-- scrollable content --&gt;
 &lt;/div&gt;</code></pre>
             </div>
@@ -47,18 +47,18 @@ export default function ScrollNavbar(){
         <section class="mb-12">
             <h2 class="text-2xl font-semibold text-slate-800 dark:text-slate-200 mb-4 transition-colors">Demo</h2>
             <p class="text-slate-600 dark:text-slate-400 mb-6 transition-colors">
-                The navbar at the top of this page uses scroll-navbar. Try scrolling down to see it hide, then scroll up to reveal it again.
+                The bar at the top of this page uses float-bar. Try scrolling down to see it hide, then scroll up to reveal it again.
             </p>
 
             <h3 class="text-xl font-semibold text-slate-700 dark:text-slate-300 mb-3 transition-colors">Container Scroll Example</h3>
             <div class="bg-white dark:bg-slate-800 rounded-lg shadow-lg overflow-hidden transition-colors">
                 <div class="relative h-64 overflow-y-auto border border-slate-200 dark:border-slate-700">
                     <div class="p-4 bg-blue-50 dark:bg-blue-900/20 h-32 transition-colors">
-                        <p class="text-slate-600 dark:text-slate-400 transition-colors">Scroll down in this container to see the navbar hide...</p>
+                        <p class="text-slate-600 dark:text-slate-400 transition-colors">Scroll down in this container to see the bar hide...</p>
                     </div>
-                    <scroll-navbar class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-3 shadow-md">
+                    <float-bar class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-3 shadow-md">
                         <div class="font-semibold">Container Navbar</div>
-                    </scroll-navbar>
+                    </float-bar>
                     <div class="p-4 space-y-4" id="scroll-content"></div>
                 </div>
             </div>
@@ -82,7 +82,7 @@ export default function ScrollNavbar(){
                             <td class="px-6 py-4 text-sm text-slate-900 dark:text-slate-100 font-mono">offset</td>
                             <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">number</td>
                             <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">0</td>
-                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Offset in pixels to account for sticky elements above the navbar</td>
+                            <td class="px-6 py-4 text-sm text-slate-600 dark:text-slate-400">Offset in pixels to account for sticky elements above the bar</td>
                         </tr>
                     </tbody>
                 </table>

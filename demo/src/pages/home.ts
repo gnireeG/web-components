@@ -36,7 +36,7 @@ export default function Home(){
                 <p class="text-slate-600 dark:text-slate-400 mb-4 transition-colors">
                     Auto-hiding navigation bar that responds to scroll direction.
                 </p>
-                <router-link to="scrollnavbar" class="text-blue-600 dark:text-blue-400 hover:underline">View Documentation →</router-link>
+                <router-link to="floatbar" class="text-blue-600 dark:text-blue-400 hover:underline">View Documentation →</router-link>
             </div>
 
             <div class="bg-white dark:bg-slate-800 rounded-lg shadow-lg p-6 transition-colors">
