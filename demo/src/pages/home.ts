@@ -118,18 +118,25 @@ connectedCallback() {
                     <h4 class="font-semibold text-slate-900 dark:text-slate-100 mb-2 transition-colors">
                         📘 TypeScript/JSX Type Definitions
                     </h4>
-                    <p class="text-sm text-slate-600 dark:text-slate-400 mb-2 transition-colors">
-                        For TypeScript autocomplete in React/JSX, create these type files:
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mb-3 transition-colors">
+                        For TypeScript autocomplete in React/JSX, create these three type files:
                     </p>
-                    <pre class="bg-slate-900 text-green-400 text-xs p-3 rounded overflow-x-auto"><code>// src/types.ts
+
+                    <div class="space-y-3">
+                        <div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-1 font-mono">src/types.ts</p>
+                            <pre class="bg-slate-900 text-green-400 text-xs p-3 rounded overflow-x-auto"><code>export interface MyElementElement extends HTMLElement {}
+
 export interface MyElementAttributes {
   name: string;
   position?: 'top' | 'bottom';
   children?: any;
-}
+}</code></pre>
+                        </div>
 
-// src/jsx.d.ts
-import type { MyElementAttributes } from './types';
+                        <div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-1 font-mono">src/jsx.d.ts</p>
+                            <pre class="bg-slate-900 text-green-400 text-xs p-3 rounded overflow-x-auto"><code>import type { MyElementAttributes } from './types';
 
 declare global {
   namespace JSX {
@@ -144,9 +151,16 @@ declare global {
   }
 }
 
-// src/types-entry.d.ts
-/// &lt;reference path="./jsx.d.ts" /&gt;
+export {};</code></pre>
+                        </div>
+
+                        <div>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mb-1 font-mono">src/types-entry.d.ts</p>
+                            <pre class="bg-slate-900 text-green-400 text-xs p-3 rounded overflow-x-auto"><code>/// &lt;reference path="./jsx.d.ts" /&gt;
+
 export * from './types';</code></pre>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="bg-white dark:bg-slate-800 rounded-lg p-4 transition-colors">
