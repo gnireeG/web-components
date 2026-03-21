@@ -10,10 +10,6 @@ router-link a.active{
     @apply border-b-white dark:border-b-gray-900 border-b;
 }
 
-/* accordion-item[open] [slot="trigger-container"]{
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-} */
 
 accordion-item:not(.small){
     @apply border border-slate-200 dark:border-slate-700 rounded-lg;
@@ -43,7 +39,6 @@ accordion-item.small[open] [slot="trigger-container"] svg{
     @apply px-6 py-4 border border-t-0 border-slate-200 dark:border-slate-700 rounded-b-lg text-slate-600 dark:text-slate-400;
 }
 
-/* Nested/Small Accordions - Table Style */
 accordion-item.small{
     @apply border-b border-slate-300 dark:border-slate-600;
 }
