@@ -1,7 +1,7 @@
 {
   "name": "@gnireeg/float-bar",
   "version": "0.1.0",
-  "description": "Floating bar web component with scroll spy, automatic positioning, and sticky behavior",
+  "description": "Floating bar web component with automatic positioning and sticky behavior",
   "type": "module",
 
   "main": "./dist/index.js",
@@ -22,7 +22,6 @@
   "keywords": [
     "float-bar",
     "floating-bar",
-    "scroll-spy",
     "navigation",
     "tabs",
     "sticky",
