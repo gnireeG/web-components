@@ -55,9 +55,7 @@ class FlyOut extends HTMLElement {
     super();
     this.shadow = this.attachShadow({ mode: "open" });
     this.name = this.getAttribute("name");
-    this.disableScrollLock = this.hasAttribute("disable-scroll-lock");
-    this.disableClickOutside = this.hasAttribute("disable-click-outside");
-    this.disableBackground = this.hasAttribute("disable-background");
+
     const posAttr = this.getAttribute("position");
 
     if (
@@ -321,6 +319,9 @@ class FlyOut extends HTMLElement {
   }
 
   connectedCallback() {
+    this.disableScrollLock = this.hasAttribute("disable-scroll-lock");
+    this.disableClickOutside = this.hasAttribute("disable-click-outside");
+    this.disableBackground = this.hasAttribute("disable-background");
     this.setAttribute("role", "dialog");
     this.setAttribute("aria-modal", "true");
     if (this.name) this.setAttribute("id", this.name);

@@ -103,6 +103,11 @@ export interface FlyOutAttributes {
    * Vanilla JS: addEventListener('fly-out-state-changed', ...)
    */
   onFlyOutStateChanged?: (event: CustomEvent<FlyOutStateChangeDetail>) => void;
+
+  /**
+   * Allow any other attributes (e.g., ref, key, data-*, aria-*, etc.)
+   */
+  [key: string]: any;
 }
 
 /**
@@ -123,4 +128,9 @@ export interface FlyOutToggleAttributes {
   class?: string;
   style?: string | Record<string, any>;
   id?: string;
+
+  /**
+   * Allow any other attributes (e.g., ref, key, data-*, aria-*, etc.)
+   */
+  [key: string]: any;
 }
