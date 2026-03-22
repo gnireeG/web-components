@@ -241,13 +241,15 @@ class FlyOut extends HTMLElement {
    * - Removes keyboard event listeners
    */
   public close() {
+    const wasOpen = this.show;
     this.show = false;
     this.classList.remove("open");
     if (!this.disableScrollLock) document.body.style.overflow = "";
 
     // Hide background when last fly-out closes (unless disabled)
-    if (!this.disableBackground) {
+    if (!this.disableBackground && wasOpen) {
       FlyOut.openFlyOuts--;
+      if(FlyOut.openFlyOuts < 0 ) FlyOut.openFlyOuts = 0;
       if (FlyOut.openFlyOuts === 0 && FlyOut.backgroundElement) {
         FlyOut.backgroundElement.classList.remove("show");
       }
