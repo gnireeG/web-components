@@ -1,6 +1,6 @@
 {
   "name": "@gnireeg/float-bar",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Floating bar web component with automatic positioning and sticky behavior",
   "type": "module",
 
