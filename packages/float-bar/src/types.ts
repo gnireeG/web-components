@@ -35,4 +35,9 @@ export interface FloatBarAttributes {
   class?: string;
   style?: string | Record<string, any>;
   id?: string;
+
+  /**
+   * Allow any other attributes (e.g., ref, key, data-*, aria-*, etc.)
+   */
+  [key: string]: any;
 }
