@@ -55,13 +55,6 @@ class FlyOut extends HTMLElement {
     super();
     this.shadow = this.attachShadow({ mode: "open" });
     this.name = this.getAttribute("name");
-
-    if (!this.name) {
-      console.warn(
-        'FlyOut: "name" attribute is required for the component to work properly.',
-      );
-    }
-
     this.disableScrollLock = this.hasAttribute("disable-scroll-lock");
     this.disableClickOutside = this.hasAttribute("disable-click-outside");
     this.disableBackground = this.hasAttribute("disable-background");
