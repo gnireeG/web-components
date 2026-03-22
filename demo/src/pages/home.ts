@@ -116,6 +116,29 @@ connectedCallback() {
 
                 <div class="bg-white dark:bg-slate-800 rounded-lg p-4 transition-colors">
                     <h4 class="font-semibold text-slate-900 dark:text-slate-100 mb-2 transition-colors">
+                        ⚠️ React: Avoid style.setProperty() in Constructor
+                    </h4>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mb-2 transition-colors">
+                        Similar to <code class="bg-slate-100 dark:bg-slate-700 px-1 rounded">setAttribute()</code>,
+                        calling <code class="bg-slate-100 dark:bg-slate-700 px-1 rounded">style.setProperty()</code> or any direct style manipulation
+                        in the constructor can cause issues in React. Move to <code class="bg-slate-100 dark:bg-slate-700 px-1 rounded">connectedCallback()</code>.
+                    </p>
+                    <pre class="bg-slate-900 text-green-400 text-xs p-3 rounded overflow-x-auto"><code>// ❌ Bad - may not work in React
+constructor() {
+  super();
+  this.shadow = this.attachShadow({ mode: 'open' });
+  this.shadow.innerHTML = \`...\`;
+  this.updateStyles(); // Calls style.setProperty()
+}
+
+// ✅ Good - Set styles in connectedCallback
+connectedCallback() {
+  this.updateStyles();
+}</code></pre>
+                </div>
+
+                <div class="bg-white dark:bg-slate-800 rounded-lg p-4 transition-colors">
+                    <h4 class="font-semibold text-slate-900 dark:text-slate-100 mb-2 transition-colors">
                         📘 TypeScript/JSX Type Definitions
                     </h4>
                     <p class="text-sm text-slate-600 dark:text-slate-400 mb-3 transition-colors">

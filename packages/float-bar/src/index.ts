@@ -88,7 +88,7 @@ class FloatBar extends HTMLElement {
       </style>
       <slot></slot>
     `;
-    this.updateStickyTop();
+    
   }
 
   private updateStickyTop(){
@@ -124,6 +124,7 @@ class FloatBar extends HTMLElement {
   }
 
   connectedCallback() {
+    this.updateStickyTop();
     this.scrollParent = this.offsetParent ?? document;
     if(this.scrollParent === document.body){
         this.scrollParent = document;
