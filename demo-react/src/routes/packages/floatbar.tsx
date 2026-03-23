@@ -63,7 +63,7 @@ function RouteComponent() {
                     </float-bar>
                     <div className="p-4 space-y-4" id="scroll-content">
                       {Array.from({length: 20}).map((item, index) =>
-                        <div className="h-24 bg-purple-100 dark:bg-purple-900/30 rounded p-4 text-slate-700 dark:text-slate-300 transition-colors">Item #{index}</div>
+                        <div className="h-24 bg-purple-100 dark:bg-purple-900/30 rounded p-4 text-slate-700 dark:text-slate-300 transition-colors" key={index}>Item #{index}</div>
                       )}
                     </div>
                 </div>
