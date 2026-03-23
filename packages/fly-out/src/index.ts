@@ -80,12 +80,40 @@ class FlyOut extends HTMLElement {
                     ${styles.positioning}
                     transform: ${styles.closedTransform};
                     z-index: 1000;
+                    visibility: hidden;
                 }
-                :host(.ready){
-                    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+                :host(.closing){
+                    animation: slideout 0.3s ease-in forwards;
+                    visibility: visible;
                 }
                 :host(.open){
-                    transform: ${styles.openTransform};
+                    animation: slidein 0.7s ease-out forwards;
+                    visibility: visible;
+                }
+                @keyframes slidein{
+                    0% {
+                        transform: ${styles.closedTransform};
+                    }
+                    30% {
+                        transform: ${styles.overshoot1};
+                    }
+                    50% {
+                        transform: ${styles.overshoot2};
+                    }
+                    70% {
+                        transform: ${styles.overshoot3};
+                    }
+                    100% {
+                        transform: ${styles.openTransform};
+                    }
+                }
+                @keyframes slideout{
+                    0% {
+                        transform: ${styles.openTransform};
+                    }
+                    100% {
+                        transform: ${styles.closedTransform};
+                    }
                 }
             </style>
             <slot></slot>
@@ -130,27 +158,39 @@ class FlyOut extends HTMLElement {
     switch (this.position) {
       case "bottom":
         return {
-          positioning: "bottom: 0; left: 50vw;",
+          positioning: "bottom: 0; left: 50vw; transform-origin: bottom;",
           closedTransform: "translateX(-50%) translateY(100%)",
           openTransform: "translateX(-50%) translateY(0)",
+          overshoot1: "translateX(-50%) translateY(0) scaleY(1.03)",
+          overshoot2: "translateX(-50%) translateY(0) scaleY(0.99)",
+          overshoot3: "translateX(-50%) translateY(0) scaleY(1.01)",
         };
       case "top":
         return {
-          positioning: "top: 0; left: 50vw;",
+          positioning: "top: 0; left: 50vw; transform-origin: top;",
           closedTransform: "translateX(-50%) translateY(-100%)",
           openTransform: "translateX(-50%) translateY(0)",
+          overshoot1: "translateX(-50%) translateY(0) scaleY(1.03)",
+          overshoot2: "translateX(-50%) translateY(0) scaleY(0.99)",
+          overshoot3: "translateX(-50%) translateY(0) scaleY(1.01)",
         };
       case "left":
         return {
-          positioning: "left: 0; top: 50vh;",
+          positioning: "left: 0; top: 50vh; transform-origin: left;",
           closedTransform: "translateX(-100%) translateY(-50%)",
           openTransform: "translateX(0) translateY(-50%)",
+          overshoot1: "translateX(0) translateY(-50%) scaleX(1.03)",
+          overshoot2: "translateX(0) translateY(-50%) scaleX(0.99)",
+          overshoot3: "translateX(0) translateY(-50%) scaleX(1.01)",
         };
       case "right":
         return {
-          positioning: "right: 0; top: 50vh;",
+          positioning: "right: 0; top: 50vh; transform-origin: right;",
           closedTransform: "translateX(100%) translateY(-50%)",
           openTransform: "translateX(0) translateY(-50%)",
+          overshoot1: "translateX(0) translateY(-50%) scaleX(1.03)",
+          overshoot2: "translateX(0) translateY(-50%) scaleX(0.99)",
+          overshoot3: "translateX(0) translateY(-50%) scaleX(1.01)",
         };
     }
   }
@@ -244,6 +284,8 @@ class FlyOut extends HTMLElement {
     const wasOpen = this.show;
     this.show = false;
     this.classList.remove("open");
+    this.classList.add("closing");
+
     if (!this.disableScrollLock) document.body.style.overflow = "";
 
     // Hide background when last fly-out closes (unless disabled)
@@ -261,6 +303,11 @@ class FlyOut extends HTMLElement {
       this.previouslyFocusedElement.focus();
       this.previouslyFocusedElement = null;
     }
+
+    // Remove closing class after animation finishes
+    setTimeout(() => {
+      this.classList.remove("closing");
+    }, 300);
 
     this.notifyTriggers();
     this.dispatchEvent(

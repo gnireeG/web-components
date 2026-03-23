@@ -11,7 +11,7 @@
 
 <body class="bg-slate-50 dark:bg-slate-900 dark:text-gray-50 transition-colors">
   <!-- Sticky Subnavigation -->
-  <div class="w-full bg-slate-200 dark:bg-slate-800 px-6 py-3 text-sm font-medium text-slate-700 dark:text-slate-300 sticky top-0 z-20 shadow-sm transition-colors h-16 md:h-18 lg:h-20 xl:h-24" id="subnav">
+  <div class="w-full bg-slate-200 dark:bg-slate-800 px-6 py-3 text-sm font-medium text-slate-700 dark:text-slate-300 sticky top-0 z-20 shadow-sm transition-colors" id="subnav">
     Sticky Subnavigation (always visible)
   </div>
 
@@ -19,20 +19,33 @@
   <float-bar offset-element="#subnav" class="w-full bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900 px-6 py-4 z-10 shadow-md transition-colors">
     <div class="flex items-center justify-between">
       <h1 class="text-xl font-bold">Main Navigation</h1>
-      <nav class="flex gap-6 items-center">
-        <router-link to="home">Home</router-link>
-        <router-link to="flyout">Flyout</router-link>
-        <router-link to="floatbar">Float-bar</router-link>
-        <router-link to="router">Router</router-link>
-        <router-link to="themetoggle">Theme</router-link>
-        <router-link to="accordion">Accordion</router-link>
+      <div class="flex gap-2 items-center flex-1">
+        <nav class="hidden md:flex gap-6 items-center">
+          <router-link to="home">Home</router-link>
+          <router-link to="flyout">Flyout</router-link>
+          <router-link to="floatbar">Float-bar</router-link>
+          <router-link to="router">Router</router-link>
+          <router-link to="themetoggle">Theme</router-link>
+          <router-link to="accordion">Accordion</router-link>
+        </nav>
+        <accordion-item class="md:hidden w-full">
+          <button slot="trigger-container" class="text-right w-full">Menu</button>
+          <div class="flex flex-col gap-2">
+            <router-link to="home">Home</router-link>
+            <router-link to="flyout">Flyout</router-link>
+            <router-link to="floatbar">Float-bar</router-link>
+            <router-link to="router">Router</router-link>
+            <router-link to="themetoggle">Theme</router-link>
+            <router-link to="accordion">Accordion</router-link>
+
+          </div>
+        </accordion-item>
         <theme-toggle></theme-toggle>
-      </nav>
+      </div>
     </div>
   </float-bar>
 
   <router-outlet></router-outlet>
 
-  
 </body>
 </html>
