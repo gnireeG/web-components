@@ -1,6 +1,8 @@
 import { createRouter as createTanStackRouter } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
 import '@gnireeg/float-bar'
+import '@gnireeg/accordion'
+import '@gnireeg/fly-out'
 
 export function getRouter() {
   const router = createTanStackRouter({

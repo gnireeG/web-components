@@ -11,6 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PackagesFlyoutRouteImport } from './routes/packages/flyout'
+import { Route as PackagesFloatbarRouteImport } from './routes/packages/floatbar'
+import { Route as PackagesAccordionRouteImport } from './routes/packages/accordion'
 import { Route as DemoStoreRouteImport } from './routes/demo/store'
 
 const AboutRoute = AboutRouteImport.update({
@@ -23,6 +26,21 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PackagesFlyoutRoute = PackagesFlyoutRouteImport.update({
+  id: '/packages/flyout',
+  path: '/packages/flyout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PackagesFloatbarRoute = PackagesFloatbarRouteImport.update({
+  id: '/packages/floatbar',
+  path: '/packages/floatbar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PackagesAccordionRoute = PackagesAccordionRouteImport.update({
+  id: '/packages/accordion',
+  path: '/packages/accordion',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DemoStoreRoute = DemoStoreRouteImport.update({
   id: '/demo/store',
   path: '/demo/store',
@@ -33,30 +51,61 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/demo/store': typeof DemoStoreRoute
+  '/packages/accordion': typeof PackagesAccordionRoute
+  '/packages/floatbar': typeof PackagesFloatbarRoute
+  '/packages/flyout': typeof PackagesFlyoutRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/demo/store': typeof DemoStoreRoute
+  '/packages/accordion': typeof PackagesAccordionRoute
+  '/packages/floatbar': typeof PackagesFloatbarRoute
+  '/packages/flyout': typeof PackagesFlyoutRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/demo/store': typeof DemoStoreRoute
+  '/packages/accordion': typeof PackagesAccordionRoute
+  '/packages/floatbar': typeof PackagesFloatbarRoute
+  '/packages/flyout': typeof PackagesFlyoutRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/demo/store'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/demo/store'
+    | '/packages/accordion'
+    | '/packages/floatbar'
+    | '/packages/flyout'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/demo/store'
-  id: '__root__' | '/' | '/about' | '/demo/store'
+  to:
+    | '/'
+    | '/about'
+    | '/demo/store'
+    | '/packages/accordion'
+    | '/packages/floatbar'
+    | '/packages/flyout'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/demo/store'
+    | '/packages/accordion'
+    | '/packages/floatbar'
+    | '/packages/flyout'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   DemoStoreRoute: typeof DemoStoreRoute
+  PackagesAccordionRoute: typeof PackagesAccordionRoute
+  PackagesFloatbarRoute: typeof PackagesFloatbarRoute
+  PackagesFlyoutRoute: typeof PackagesFlyoutRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -75,6 +124,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/packages/flyout': {
+      id: '/packages/flyout'
+      path: '/packages/flyout'
+      fullPath: '/packages/flyout'
+      preLoaderRoute: typeof PackagesFlyoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/packages/floatbar': {
+      id: '/packages/floatbar'
+      path: '/packages/floatbar'
+      fullPath: '/packages/floatbar'
+      preLoaderRoute: typeof PackagesFloatbarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/packages/accordion': {
+      id: '/packages/accordion'
+      path: '/packages/accordion'
+      fullPath: '/packages/accordion'
+      preLoaderRoute: typeof PackagesAccordionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/demo/store': {
       id: '/demo/store'
       path: '/demo/store'
@@ -89,6 +159,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   DemoStoreRoute: DemoStoreRoute,
+  PackagesAccordionRoute: PackagesAccordionRoute,
+  PackagesFloatbarRoute: PackagesFloatbarRoute,
+  PackagesFlyoutRoute: PackagesFlyoutRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -2,6 +2,8 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
+@source '../../../demo/src/**/*.{ts,html}';
+
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
@@ -344,4 +346,50 @@ a {
     background-color: var(--background);
     color: var(--foreground);
   }
+}
+
+
+
+accordion-item:not(.small){
+    @apply border border-slate-200 dark:border-slate-700 rounded-lg;
+}
+
+.accordion-trigger{
+    @apply w-full text-left px-6 py-4 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors font-semibold text-slate-900 dark:text-slate-100 flex justify-between items-center cursor-pointer;
+}
+
+accordion-item:not(.small)[open] .accordion-trigger{
+    @apply bg-slate-50 dark:bg-slate-700;
+}
+
+accordion-item:not(.small)[open] [slot="trigger-container"] svg{
+    transform: rotate(180deg);
+}
+
+accordion-item.small:not([open]) [slot="trigger-container"] svg{
+    transform: rotate(0deg);
+}
+
+accordion-item.small[open] [slot="trigger-container"] svg{
+    transform: rotate(180deg);
+}
+
+.accordion-content{
+    @apply px-6 py-4 border border-t-0 border-slate-200 dark:border-slate-700 rounded-b-lg text-slate-600 dark:text-slate-400;
+}
+
+accordion-item.small{
+    @apply border-b border-slate-300 dark:border-slate-600;
+}
+
+accordion-item.small:last-child{
+    @apply border-b-0;
+}
+
+.small-trigger{
+    @apply w-full text-left px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-sm font-normal text-slate-700 dark:text-slate-300 flex justify-between items-center cursor-pointer;
+}
+
+.small-content{
+    @apply px-3 py-2 pb-3 text-sm text-slate-600 dark:text-slate-400;
 }

@@ -3,7 +3,7 @@ import ThemeToggle from './ThemeToggle'
 
 export default function Header() {
   return (
-    <float-bar className="z-50 border-b border-[var(--line)] bg-[var(--header-bg)] px-4 backdrop-blur-lg">
+    <float-bar className="z-50 border-b border-[var(--line)] bg-[var(--header-bg)] px-4 backdrop-blur-lg" suppressHydrationWarning>
       <nav className="page-wrap flex flex-wrap items-center gap-x-3 gap-y-2 py-3 sm:py-4">
         <h2 className="m-0 flex-shrink-0 text-base font-semibold tracking-tight">
           <Link
@@ -57,33 +57,26 @@ export default function Header() {
             Home
           </Link>
           <Link
-            to="/about"
+            to="/packages/flyout"
             className="nav-link"
             activeProps={{ className: 'nav-link is-active' }}
           >
-            About
+            Fly-out
           </Link>
-          <a
-            href="https://tanstack.com/start/latest/docs/framework/react/overview"
+          <Link
+            to="/packages/accordion"
             className="nav-link"
-            target="_blank"
-            rel="noreferrer"
+            activeProps={{ className: 'nav-link is-active' }}
           >
-            Docs
-          </a>
-          <details className="relative w-full sm:w-auto">
-            <summary className="nav-link list-none cursor-pointer">
-              Demos
-            </summary>
-            <div className="mt-2 min-w-56 rounded-xl border border-[var(--line)] bg-[var(--header-bg)] p-2 shadow-lg sm:absolute sm:right-0">
-              <a
-                href="/demo/store"
-                className="block rounded-lg px-3 py-2 text-sm text-[var(--sea-ink-soft)] no-underline transition hover:bg-[var(--link-bg-hover)] hover:text-[var(--sea-ink)]"
-              >
-                Store
-              </a>
-            </div>
-          </details>
+            Accordion
+          </Link>
+          <Link
+            to="/packages/floatbar"
+            className="nav-link"
+            activeProps={{ className: 'nav-link is-active' }}
+          >
+            Float-bar
+          </Link>
         </div>
       </nav>
     </float-bar>
