@@ -38,8 +38,8 @@ if (typeof window !== 'undefined' && typeof HTMLElement !== 'undefined') {
  * by adding `transform` to your transition (e.g., `transition: transform 0.2s, color 0.2s`).
  */
 class FlyOut extends HTMLElement {
-  private name: string | null = null;
-  private position: "bottom" | "top" | "left" | "right" = "bottom";
+  private _name: string | null = null;
+  private _position: "bottom" | "top" | "left" | "right" = "bottom";
   private show = false;
   private shadow: ShadowRoot;
   private disableScrollLock = false;
@@ -50,24 +50,52 @@ class FlyOut extends HTMLElement {
   private static stylesApplied = false;
   private static backgroundElement: HTMLElement | null = null;
   private static openFlyOuts = 0;
+  private hasInitialized = false;
+
+  // Property getters/setters for React compatibility
+  get name(): string | null {
+    return this._name;
+  }
+  set name(value: string | null) {
+    this._name = value;
+    if (value !== null) {
+      this.setAttribute('name', value);
+    }
+  }
+
+  get position(): "bottom" | "top" | "left" | "right" {
+    return this._position;
+  }
+  set position(value: "bottom" | "top" | "left" | "right") {
+    this._position = value;
+    this.setAttribute('position', value);
+    // Re-render if already initialized
+    if (this.hasInitialized && this.shadow) {
+      this.render();
+    }
+  }
+
+  static get observedAttributes() {
+    return ['name', 'position'];
+  }
 
   constructor() {
     super();
     this.shadow = this.attachShadow({ mode: "open" });
-    this.name = this.getAttribute("name");
+  }
 
-    const posAttr = this.getAttribute("position");
-
-    if (
-      posAttr === "bottom" ||
-      posAttr === "top" ||
-      posAttr === "left" ||
-      posAttr === "right"
-    ) {
-      this.position = posAttr;
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
+    if (name === 'name') {
+      this._name = newValue;
+    } else if (name === 'position') {
+      if (newValue === "bottom" || newValue === "top" || newValue === "left" || newValue === "right") {
+        this._position = newValue;
+        // Re-render if already initialized
+        if (this.hasInitialized && this.shadow) {
+          this.render();
+        }
+      }
     }
-
-    this.render();
   }
 
   private render() {
@@ -368,12 +396,31 @@ class FlyOut extends HTMLElement {
   }
 
   connectedCallback() {
+    // Read initial attribute values
+    this.name = this.getAttribute("name");
+
+    const posAttr = this.getAttribute("position");
+    if (
+      posAttr === "bottom" ||
+      posAttr === "top" ||
+      posAttr === "left" ||
+      posAttr === "right"
+    ) {
+      this.position = posAttr;
+    }
+
     this.disableScrollLock = this.hasAttribute("disable-scroll-lock");
     this.disableClickOutside = this.hasAttribute("disable-click-outside");
     this.disableBackground = this.hasAttribute("disable-background");
+
+    // Render with all attributes set
+    this.render();
+
+    // Set ARIA attributes
     this.setAttribute("role", "dialog");
     this.setAttribute("aria-modal", "true");
     if (this.name) this.setAttribute("id", this.name);
+
     document.addEventListener("toggle-fly-out", this.handleToggleFlyOut);
     FlyOut.backgroundElement?.addEventListener('click', this.handleBackgroundClick);
     if (!this.disableClickOutside) {
@@ -382,6 +429,9 @@ class FlyOut extends HTMLElement {
     requestAnimationFrame(() => {
       this.classList.add("ready");
     });
+
+    // Mark as initialized so attributeChangedCallback will work
+    this.hasInitialized = true;
   }
 
   disconnectedCallback() {
@@ -394,6 +444,14 @@ class FlyOut extends HTMLElement {
     if (this.show && !this.disableScrollLock) {
       document.body.style.overflow = "";
     }
+
+    this._name = null;
+    this._position = "bottom";
+    this.show = false;
+    this.disableScrollLock = false;
+    this.disableClickOutside = false;
+    this.disableBackground = false;
+    this.hasInitialized = false;
   }
 }
 
