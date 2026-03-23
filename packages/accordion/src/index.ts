@@ -79,17 +79,41 @@ class AccordionItem extends HTMLElement{
     private shadow: ShadowRoot;
     private triggerContainerSlot: HTMLSlotElement | null = null;
     private triggerElement: HTMLElement | null = null;
-    public open = false;
-    private animationTime: string;
-    private easing: string;
+    private _open = false;
+    private _animationTime: string = '300';
+    private _easing: string = 'ease';
+
+    // Property getters/setters for React compatibility
+    get open(): boolean {
+        return this._open;
+    }
+    set open(value: boolean) {
+        this._open = value;
+        if (value) {
+            this.setAttribute('open', '');
+        } else {
+            this.removeAttribute('open');
+        }
+    }
+
+    get animationTime(): string {
+        return this._animationTime;
+    }
+    set animationTime(value: string) {
+        this._animationTime = value;
+        this.setAttribute('animation-time', value);
+    }
+
+    get easing(): string {
+        return this._easing;
+    }
+    set easing(value: string) {
+        this._easing = value;
+        this.setAttribute('animation-easing', value);
+    }
 
     constructor(){
         super();
-
-        // Initialize state from attribute
-        this.open = this.hasAttribute('open');
-        this.animationTime = this.getAttribute('animation-time') || '300';
-        this.easing = this.getAttribute('animation-easing') || 'ease';
         this.shadow = this.attachShadow({ mode: 'open'} );
         this.shadow.innerHTML = /*HTML*/`
             <style>
@@ -100,7 +124,7 @@ class AccordionItem extends HTMLElement{
                 .content-wrapper {
                     display: grid;
                     grid-template-rows: 0fr;
-                    transition: grid-template-rows ${this.animationTime}ms ${this.easing};
+                    transition: grid-template-rows ${this._animationTime}ms ${this._easing};
                     overflow: hidden;
                 }
 
@@ -122,7 +146,7 @@ class AccordionItem extends HTMLElement{
     }
 
     static get observedAttributes() {
-        return ['open'];
+        return ['open', 'animation-time', 'animation-easing'];
     }
 
     attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
@@ -131,11 +155,17 @@ class AccordionItem extends HTMLElement{
             case 'open':
                 const shouldBeOpen = newValue !== null;
                 // Only update if state actually changed to prevent infinite loop
-                if(this.open !== shouldBeOpen) {
-                    this.open = shouldBeOpen;
+                if(this._open !== shouldBeOpen) {
+                    this._open = shouldBeOpen;
                     this.updateTriggerAccessibility();
                     this.dispatchStateEvent();
                 }
+                break;
+            case 'animation-time':
+                this._animationTime = newValue || '300';
+                break;
+            case 'animation-easing':
+                this._easing = newValue || 'ease';
                 break;
             default:
                 break;
@@ -214,7 +244,7 @@ class AccordionItem extends HTMLElement{
      * @fires AccordionOpened
      */
     public show = () =>{
-        this.open = true;
+        this._open = true;
         this.reflectState();
     }
 
@@ -225,13 +255,13 @@ class AccordionItem extends HTMLElement{
      * @fires AccordionClosed
      */
     public close = () =>{
-        this.open = false;
+        this._open = false;
         this.reflectState();
     }
 
     private reflectState = () => {
         // Update attribute to match property
-        this.open ? this.setAttribute('open', '') : this.removeAttribute('open');
+        this._open ? this.setAttribute('open', '') : this.removeAttribute('open');
         this.updateTriggerAccessibility();
         this.dispatchStateEvent();
     }
@@ -241,19 +271,19 @@ class AccordionItem extends HTMLElement{
         const eventDetail = {
             bubbles: true,
             composed: true,
-            detail: { open: this.open }
+            detail: { open: this._open }
         };
 
         // Vanilla JS / Web Standards convention (lowercase with hyphens)
-        this.dispatchEvent(new CustomEvent(this.open ? 'accordion-opened' : 'accordion-closed', eventDetail));
+        this.dispatchEvent(new CustomEvent(this._open ? 'accordion-opened' : 'accordion-closed', eventDetail));
 
         // React convention (camelCase)
-        this.dispatchEvent(new CustomEvent(this.open ? 'AccordionOpened' : 'AccordionClosed', eventDetail));
+        this.dispatchEvent(new CustomEvent(this._open ? 'AccordionOpened' : 'AccordionClosed', eventDetail));
     }
 
     private updateTriggerAccessibility = () => {
         if(!this.triggerElement) return;
-        this.triggerElement.setAttribute('aria-expanded', String(this.open));
+        this.triggerElement.setAttribute('aria-expanded', String(this._open));
     }
 }
 
@@ -306,8 +336,21 @@ class AccordionItem extends HTMLElement{
  */
 class AccordionGroup extends HTMLElement{
 
-    private allowMultiple: boolean;
+    private _allowMultiple: boolean = false;
     private static stylesApplied = false;
+
+    // Property getter/setter for React compatibility
+    get allowMultipleOpen(): boolean {
+        return this._allowMultiple;
+    }
+    set allowMultipleOpen(value: boolean) {
+        this._allowMultiple = value;
+        if (value) {
+            this.setAttribute('allow-multiple-open', '');
+        } else {
+            this.removeAttribute('allow-multiple-open');
+        }
+    }
 
     constructor(){
         super();
@@ -317,7 +360,6 @@ class AccordionGroup extends HTMLElement{
             document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
             AccordionGroup.stylesApplied = true;
         }
-        this.allowMultiple = this.hasAttribute('allow-multiple-open');
     }
 
     static get observedAttributes() {
@@ -330,8 +372,8 @@ class AccordionGroup extends HTMLElement{
             case 'allow-multiple-open':
                 const shouldBeAllowed = newValue !== null;
                 // Only update if state actually changed to prevent infinite loop
-                if(this.allowMultiple !== shouldBeAllowed) {
-                    this.allowMultiple = shouldBeAllowed;
+                if(this._allowMultiple !== shouldBeAllowed) {
+                    this._allowMultiple = shouldBeAllowed;
                 }
                 break;
             default:
@@ -348,7 +390,7 @@ class AccordionGroup extends HTMLElement{
     }
 
     private handleAccordionOpened = (e: Event) =>{
-        if(this.allowMultiple) return;
+        if(this._allowMultiple) return;
         const childAccordions = this.querySelectorAll('accordion-item');
         childAccordions.forEach( acc => {
             const accordion = acc as AccordionItem;
