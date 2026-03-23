@@ -73,45 +73,55 @@ export default function Home(){
             <div class="space-y-4">
                 <div class="bg-white dark:bg-slate-800 rounded-lg p-4 transition-colors">
                     <h4 class="font-semibold text-slate-900 dark:text-slate-100 mb-2 transition-colors">
-                        ⚠️ React: Avoid setAttribute() in Constructor
+                        🔑 React: Use Property Getters/Setters (Critical!)
                     </h4>
                     <p class="text-sm text-slate-600 dark:text-slate-400 mb-2 transition-colors">
-                        React sets attributes <strong>after</strong> the constructor runs.
-                        Calling <code class="bg-slate-100 dark:bg-slate-700 px-1 rounded">setAttribute()</code> in the constructor will be overwritten.
+                        React sets <strong>properties</strong>, not attributes (for performance).
+                        Without getters/setters, your component won't receive prop updates, especially after navigation.
                     </p>
-                    <pre class="bg-slate-900 text-green-400 text-xs p-3 rounded overflow-x-auto"><code>// ❌ Bad - React will overwrite this
-constructor() {
-  super();
-  this.setAttribute("role", "dialog");
+                    <pre class="bg-slate-900 text-green-400 text-xs p-3 rounded overflow-x-auto"><code>// ❌ Bad - React sets property but your private variable isn't updated
+class MyElement extends HTMLElement {
+  private position: string = "bottom";
+
+  connectedCallback() {
+    console.log(this.position); // Always "bottom" even if React set it!
+  }
 }
 
-// ✅ Good - Set in connectedCallback
-connectedCallback() {
-  this.setAttribute("role", "dialog");
+// ✅ Good - Getter/Setter intercepts React's property assignments
+class MyElement extends HTMLElement {
+  private _position: string = "bottom";
+
+  get position(): string {
+    return this._position;
+  }
+  set position(value: string) {
+    this._position = value;
+    this.setAttribute('position', value); // Sync with attribute
+
+    // Re-render if needed
+    if (this.hasInitialized && this.shadow) {
+      this.render();
+    }
+  }
+
+  static get observedAttributes() {
+    return ['position'];
+  }
+
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
+    if (name === 'position' && newValue) {
+      this._position = newValue; // Update private variable
+    }
+  }
 }</code></pre>
-                </div>
-
-                <div class="bg-white dark:bg-slate-800 rounded-lg p-4 transition-colors">
-                    <h4 class="font-semibold text-slate-900 dark:text-slate-100 mb-2 transition-colors">
-                        ⚠️ setAttribute() in constructor clears React attributes
-                    </h4>
-                    <p class="text-sm text-slate-600 dark:text-slate-400 mb-2 transition-colors">
-                        If you call <code class="bg-slate-100 dark:bg-slate-700 px-1 rounded">setAttribute()</code> in the constructor,
-                        all attributes set in React JSX will disappear. Reading with <code class="bg-slate-100 dark:bg-slate-700 px-1 rounded">getAttribute()</code> is fine.
-                    </p>
-                    <pre class="bg-slate-900 text-green-400 text-xs p-3 rounded overflow-x-auto"><code>constructor() {
-  super();
-  // ✅ This is fine
-  this.name = this.getAttribute("name");
-
-  // ❌ This will clear all React-set attributes
-  this.setAttribute("role", "dialog");
-}
-
-// ✅ Move setAttribute to connectedCallback
-connectedCallback() {
-  this.setAttribute("role", "dialog");
-}</code></pre>
+                    <div class="mt-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded">
+                        <p class="text-xs text-yellow-800 dark:text-yellow-200">
+                            <strong>Why this matters:</strong> When React navigates between pages, it creates new component instances
+                            and sets properties directly (element.position = "top") without touching attributes.
+                            Without setters, your internal state stays at default values.
+                        </p>
+                    </div>
                 </div>
 
                 <div class="bg-white dark:bg-slate-800 rounded-lg p-4 transition-colors">
