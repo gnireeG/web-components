@@ -58,7 +58,7 @@ function RouteComponent() {
                     <div className="p-4 bg-blue-50 dark:bg-blue-900/20 h-32 transition-colors">
                         <p className="text-slate-600 dark:text-slate-400 transition-colors">Scroll down in this container to see the bar hide...</p>
                     </div>
-                    <float-bar className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-3 shadow-md" suppressHydrationWarning>
+                    <float-bar className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-3 shadow-md" offset="20" suppressHydrationWarning>
                         <div className="font-semibold">Container Navbar</div>
                     </float-bar>
                     <div className="p-4 space-y-4" id="scroll-content">

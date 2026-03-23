@@ -60,7 +60,7 @@ function RouteComponent() {
                     </div>
                     <div className="accordion-content">
                         <p>Web components are a set of web platform APIs that allow you to create custom, reusable, encapsulated HTML tags to use in web pages and web apps. They work across modern browsers and can be used with any JavaScript framework or library.</p>
-                        <accordion-group className="mt-6 border border-slate-300 dark:border-slate-600 rounded" suppressHydrationWarning>
+                        <accordion-group className="mt-6 border border-slate-300 dark:border-slate-600 rounded" suppressHydrationWarning allow-multiple-open={true}>
                             <accordion-item className="small" suppressHydrationWarning>
                                 <button slot="trigger-container" className="small-trigger">
                                     <span>Custom Elements</span>
