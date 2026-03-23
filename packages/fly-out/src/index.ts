@@ -474,32 +474,53 @@ class FlyOut extends HTMLElement {
  * ```
  */
 class FlyOutToggle extends HTMLElement {
-  private flyOutName: string | null = null;
+  private _flyOutName: string | null = null;
+
+  // Property getter/setter for React compatibility
+  get name(): string | null {
+    return this._flyOutName;
+  }
+  set name(value: string | null) {
+    this._flyOutName = value;
+    if (value !== null) {
+      this.setAttribute('name', value);
+    }
+  }
+
+  static get observedAttributes() {
+    return ['name'];
+  }
 
   constructor() {
     super();
   }
 
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
+    if (name === 'name') {
+      this._flyOutName = newValue;
+    }
+  }
+
   private toggleFlyout() {
     document.dispatchEvent(
       new CustomEvent("toggle-fly-out", {
-        detail: { name: this.flyOutName },
+        detail: { name: this._flyOutName },
       }),
     );
   }
 
   private updateAriaExpanded = (e: Event) => {
     const customEvent = e as CustomEvent;
-    if (customEvent.detail.name === this.flyOutName) {
+    if (customEvent.detail.name === this._flyOutName) {
       this.setAttribute("aria-expanded", String(customEvent.detail.open));
     }
   };
 
   connectedCallback() {
-    this.flyOutName = this.getAttribute("name");
+    this.name = this.getAttribute("name");
 
-    if (this.flyOutName) {
-      this.setAttribute("aria-controls", this.flyOutName);
+    if (this._flyOutName) {
+      this.setAttribute("aria-controls", this._flyOutName);
     }
     this.setAttribute("aria-expanded", "false");
 
@@ -513,6 +534,9 @@ class FlyOutToggle extends HTMLElement {
       "fly-out-state-changed",
       this.updateAriaExpanded,
     );
+
+    // Reset for potential re-use
+    this._flyOutName = null;
   }
 }
 
