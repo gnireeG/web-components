@@ -444,14 +444,6 @@ class FlyOut extends HTMLElement {
     if (this.show && !this.disableScrollLock) {
       document.body.style.overflow = "";
     }
-
-    this._name = null;
-    this._position = "bottom";
-    this.show = false;
-    this.disableScrollLock = false;
-    this.disableClickOutside = false;
-    this.disableBackground = false;
-    this.hasInitialized = false;
   }
 }
 
@@ -534,9 +526,6 @@ class FlyOutToggle extends HTMLElement {
       "fly-out-state-changed",
       this.updateAriaExpanded,
     );
-
-    // Reset for potential re-use
-    this._flyOutName = null;
   }
 }
 
