@@ -57,12 +57,33 @@ class FloatBar extends HTMLElement {
   private shadow: ShadowRoot;
   private resizeTimeout: ReturnType<typeof setTimeout> | null = null;
   private scrollParent: Element | Document = document;
-  private disabled = false;
-  private offset = 0;
+  private _disabled = false;
+  private _offset = 0;
   private offsetElement: Element | null = null;
   private totalOffset = 0;
   private offsetElementObserver: ResizeObserver | null = null;
   private isResizing = false;
+
+  // Property getters/setters for React compatibility
+  get disabled(): boolean {
+    return this._disabled;
+  }
+  set disabled(value: boolean) {
+    this._disabled = value;
+    if (value) {
+      this.setAttribute('disabled', '');
+    } else {
+      this.removeAttribute('disabled');
+    }
+  }
+
+  get offset(): number {
+    return this._offset;
+  }
+  set offset(value: number) {
+    this._offset = value;
+    this.setAttribute('offset', String(value));
+  }
 
   static get observedAttributes() {
     return ['offset', 'disabled'];
@@ -70,11 +91,6 @@ class FloatBar extends HTMLElement {
 
   constructor() {
     super();
-
-    this.disabled = this.hasAttribute('disabled');
-    const offsetAttr = this.getAttribute('offset');
-    //this.offset = offsetAttr ? parseInt(offsetAttr, 10) : 0;
-
     this.shadow = this.attachShadow({ mode: 'open' });
     this.shadow.innerHTML = `
       <style>
@@ -103,21 +119,21 @@ class FloatBar extends HTMLElement {
     if (oldValue === newValue) return;
 
     if (name === 'offset') {
-      this.offset = newValue ? parseInt(newValue, 10) : 0;
+      this._offset = newValue ? parseInt(newValue, 10) : 0;
       this.calculateTotalOffset();
       this.updateStickyTop();
     }
 
     if (name === 'disabled') {
-      const wasDisabled = this.disabled;
-      this.disabled = newValue !== null;
+      const wasDisabled = this._disabled;
+      this._disabled = newValue !== null;
 
       // Reset navbar position when disabled state changes
       this.translateAmount = 0;
       this.applyTransform();
 
       // If re-enabled, reset scroll tracking
-      if (wasDisabled && !this.disabled) {
+      if (wasDisabled && !this._disabled) {
         this.lastScroll = this.getScrollPosition();
       }
     }
@@ -157,6 +173,12 @@ class FloatBar extends HTMLElement {
 
     if (this.resizeTimeout) {
       clearTimeout(this.resizeTimeout);
+    }
+
+    // Clean up ResizeObserver
+    if (this.offsetElementObserver) {
+      this.offsetElementObserver.disconnect();
+      this.offsetElementObserver = null;
     }
   }
 
@@ -214,7 +236,7 @@ class FloatBar extends HTMLElement {
   }
 
   private calculateTranslateAmount() {
-    if (this.disabled) {
+    if (this._disabled) {
       return;
     }
 
