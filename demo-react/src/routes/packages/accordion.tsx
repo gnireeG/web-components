@@ -46,10 +46,10 @@ function RouteComponent() {
             <div className="space-y-4 mb-12">
                 <accordion-item open suppressHydrationWarning>
                     <div slot="trigger-container" className="accordion-trigger flex gap-2 items-start">
-                        <button accordion-trigger className="flex justify-between items-center flex-1 text-left">
+                        <button accordion-trigger="" className="flex justify-between items-center flex-1 text-left" suppressHydrationWarning>
                             <span>What is a web component?</span>
                             <svg className="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                             </svg>
                         </button>
                         <button
@@ -60,12 +60,12 @@ function RouteComponent() {
                     </div>
                     <div className="accordion-content">
                         <p>Web components are a set of web platform APIs that allow you to create custom, reusable, encapsulated HTML tags to use in web pages and web apps. They work across modern browsers and can be used with any JavaScript framework or library.</p>
-                        <accordion-group className="mt-6 border border-slate-300 dark:border-slate-600 rounded" suppressHydrationWarning allow-multiple-open={true}>
+                        <accordion-group className="mt-6 border border-slate-300 dark:border-slate-600 rounded" allow-multiple-open={true} suppressHydrationWarning>
                             <accordion-item className="small" suppressHydrationWarning>
                                 <button slot="trigger-container" className="small-trigger">
                                     <span>Custom Elements</span>
                                     <svg className="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                                     </svg>
                                 </button>
                                 <div className="small-content">Custom Elements allow you to define your own HTML tags with custom behavior. They're registered using <code className="bg-slate-200 dark:bg-slate-700 px-1 rounded text-xs">customElements.define()</code> and extend <code className="bg-slate-200 dark:bg-slate-700 px-1 rounded text-xs">HTMLElement</code>.</div>
@@ -74,7 +74,7 @@ function RouteComponent() {
                                 <button slot="trigger-container" className="small-trigger">
                                     <span>Shadow DOM</span>
                                     <svg className="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                                     </svg>
                                 </button>
                                 <div className="small-content">Shadow DOM provides encapsulation for your component's internal structure and styling. Styles inside a shadow root don't leak out, and external styles don't leak in (unless explicitly allowed).</div>
@@ -83,7 +83,7 @@ function RouteComponent() {
                                 <button slot="trigger-container" className="small-trigger">
                                     <span>HTML Templates</span>
                                     <svg className="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                                     </svg>
                                 </button>
                                 <div className="small-content">The <code className="bg-slate-200 dark:bg-slate-700 px-1 rounded text-xs">&lt;template&gt;</code> element lets you declare fragments of markup that can be cloned and inserted into the document at runtime. Content inside templates isn't rendered until activated.</div>
@@ -92,7 +92,7 @@ function RouteComponent() {
                                 <button slot="trigger-container" className="small-trigger">
                                     <span>Slots</span>
                                     <svg className="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                                     </svg>
                                 </button>
                                 <div className="small-content">Slots allow you to define placeholders in your component's shadow DOM that can be filled with content from the light DOM. Named slots enable multiple insertion points with different content.</div>
@@ -105,7 +105,7 @@ function RouteComponent() {
                     <button slot="trigger-container" className="accordion-trigger">
                         <span>How do I use the accordion component?</span>
                         <svg className="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
                     <div className="accordion-content">
@@ -117,7 +117,7 @@ function RouteComponent() {
                     <button slot="trigger-container" className="accordion-trigger">
                         <span>Can I customize the styling?</span>
                         <svg className="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
                     <div className="accordion-content">
@@ -133,7 +133,7 @@ function RouteComponent() {
                     <button slot="trigger-container" className="accordion-trigger">
                         <span>Frontend Technologies</span>
                         <svg className="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
                     <div className="accordion-content">
@@ -145,7 +145,7 @@ function RouteComponent() {
                     <button slot="trigger-container" className="accordion-trigger">
                         <span>Backend Technologies</span>
                         <svg className="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
                     <div className="accordion-content">
@@ -157,7 +157,7 @@ function RouteComponent() {
                     <button slot="trigger-container" className="accordion-trigger">
                         <span>Database Systems</span>
                         <svg className="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
                     <div className="accordion-content">
@@ -173,7 +173,7 @@ function RouteComponent() {
                     <button slot="trigger-container" className="accordion-trigger">
                         <span>Design Principles</span>
                         <svg className="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
                     <div className="accordion-content">
@@ -185,7 +185,7 @@ function RouteComponent() {
                     <button slot="trigger-container" className="accordion-trigger">
                         <span>Accessibility</span>
                         <svg className="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
                     <div className="accordion-content">
@@ -197,7 +197,7 @@ function RouteComponent() {
                     <button slot="trigger-container" className="accordion-trigger">
                         <span>Performance</span>
                         <svg className="w-5 h-5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
                     <div className="accordion-content">
