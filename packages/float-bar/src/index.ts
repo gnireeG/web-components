@@ -59,10 +59,13 @@ class FloatBar extends HTMLElement {
   private scrollParent: Element | Document = document;
   private _disabled = false;
   private _offset = 0;
-  private offsetElement: Element | null = null;
+  private _offsetElement: string | null = null;
+  private offsetElementRef: Element | null = null;
   private totalOffset = 0;
   private offsetElementObserver: ResizeObserver | null = null;
   private isResizing = false;
+
+  private _isSticky = false;
 
   // Property getters/setters for React compatibility
   get disabled(): boolean {
@@ -85,8 +88,20 @@ class FloatBar extends HTMLElement {
     this.setAttribute('offset', String(value));
   }
 
+  get offsetElement(): string | null {
+    return this._offsetElement;
+  }
+  set offsetElement(value: string | null) {
+    this._offsetElement = value;
+    if (value !== null) {
+      this.setAttribute('offset-element', value);
+    } else {
+      this.removeAttribute('offset-element');
+    }
+  }
+
   static get observedAttributes() {
-    return ['offset', 'disabled'];
+    return ['offset', 'disabled', 'offset-element'];
   }
 
   constructor() {
@@ -112,7 +127,7 @@ class FloatBar extends HTMLElement {
   }
 
   private calculateTotalOffset(){
-    this.totalOffset = this.offset + (this.offsetElement ? this.offsetElement.clientHeight : 0);
+    this.totalOffset = this.offset + (this.offsetElementRef ? this.offsetElementRef.clientHeight : 0);
   }
 
   attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null) {
@@ -137,6 +152,29 @@ class FloatBar extends HTMLElement {
         this.lastScroll = this.getScrollPosition();
       }
     }
+
+    if (name === 'offset-element') {
+      this._offsetElement = newValue;
+      // Clean up existing observer
+      if (this.offsetElementObserver) {
+        this.offsetElementObserver.disconnect();
+        this.offsetElementObserver = null;
+      }
+      // Query for new element and set up observer
+      if (newValue) {
+        const el = document.querySelector(newValue);
+        if (el) {
+          this.offsetElementRef = el;
+          this.addObserverToOffsetElement();
+          this.calculateTotalOffset();
+          this.updateStickyTop();
+        }
+      } else {
+        this.offsetElementRef = null;
+        this.calculateTotalOffset();
+        this.updateStickyTop();
+      }
+    }
   }
 
   connectedCallback() {
@@ -148,9 +186,10 @@ class FloatBar extends HTMLElement {
 
     const offsetElementSelector = this.getAttribute('offset-element');
     if(offsetElementSelector){
+      this._offsetElement = offsetElementSelector;
       const el = document.querySelector(offsetElementSelector)
       if(el){
-        this.offsetElement = el;
+        this.offsetElementRef = el;
         this.addObserverToOffsetElement()
       }
     }
@@ -183,12 +222,12 @@ class FloatBar extends HTMLElement {
   }
 
   private addObserverToOffsetElement(){
-    if(this.offsetElement){
+    if(this.offsetElementRef){
       this.offsetElementObserver = new ResizeObserver(() =>{
         this.handleResizeUpdate();
       });
 
-      this.offsetElementObserver.observe(this.offsetElement)
+      this.offsetElementObserver.observe(this.offsetElementRef)
     }
   }
 
@@ -243,6 +282,12 @@ class FloatBar extends HTMLElement {
     const currentScroll = this.getScrollPosition();
     const scrollDiff = currentScroll - this.lastScroll;
     const isSticky = this.isSticky();
+
+    // Update class when sticky state changes
+    if(this._isSticky !== isSticky){
+      this._isSticky = isSticky;
+      isSticky ? this.classList.add('is-sticky') : this.classList.remove('is-sticky');
+    }
 
     if (currentScroll <= 0 || !isSticky) {
         this.translateAmount = 0;
