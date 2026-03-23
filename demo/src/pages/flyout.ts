@@ -205,7 +205,7 @@ export default function Flyout(){
     </div>
   </fly-out>
 
-  <fly-out name="demo-top" disable-background position="top" class="bg-gradient-to-b from-green-600 to-green-700 w-screen shadow-2xl shadow-red-600">
+  <fly-out name="demo-top" disable-background position="top" class="bg-gradient-to-b from-green-600 to-green-700 w-screen shadow-2xl">
     <div class="p-8 max-w-2xl mx-auto text-white">
       <h3 class="text-2xl font-bold mb-4">Top Fly Out</h3>
       <p class="mb-6 text-green-100">
