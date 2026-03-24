@@ -162,7 +162,7 @@ class FlyOut extends HTMLElement {
           -webkit-backdrop-filter: blur(3px);
           opacity: 0;
           pointer-events: none;
-          transition: opacity 0.2s ease-out;
+          transition: opacity .3s ease-out;
         }
         .fly-out-background.show {
           opacity: 1;
