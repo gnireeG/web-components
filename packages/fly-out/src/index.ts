@@ -51,6 +51,7 @@ class FlyOut extends HTMLElement {
   private static backgroundElement: HTMLElement | null = null;
   private static openFlyOuts = 0;
   private hasInitialized = false;
+  private displayObserver: ResizeObserver | null = null;
 
   // Property getters/setters for React compatibility
   get name(): string | null {
@@ -269,6 +270,11 @@ class FlyOut extends HTMLElement {
    * - Adds keyboard event listeners (ESC to close, Tab for focus trap)
    */
   public open() {
+    const isHidden = window.getComputedStyle(this).display === 'none';
+    if(isHidden){
+      console.log(`[fly-out] [${this.name}] cannot be opened because this.display is set to 'none'`);
+      return;
+    }
     this.show = true;
     this.previouslyFocusedElement = document.activeElement as HTMLElement;
 
@@ -430,6 +436,15 @@ class FlyOut extends HTMLElement {
       this.classList.add("ready");
     });
 
+    // Watch for display changes (e.g., responsive classes like "flex md:hidden")
+    this.displayObserver = new ResizeObserver(() => {
+      const isHidden = window.getComputedStyle(this).display === 'none';
+      if (isHidden && this.show) {
+        this.close();
+      }
+    });
+    this.displayObserver.observe(this);
+
     // Mark as initialized so attributeChangedCallback will work
     this.hasInitialized = true;
   }
@@ -443,6 +458,12 @@ class FlyOut extends HTMLElement {
     // Cleanup falls FlyOut offen war:
     if (this.show && !this.disableScrollLock) {
       document.body.style.overflow = "";
+    }
+
+    // Clean up display observer
+    if (this.displayObserver) {
+      this.displayObserver.disconnect();
+      this.displayObserver = null;
     }
   }
 }

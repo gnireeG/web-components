@@ -192,7 +192,7 @@ export default function Flyout(){
                 </p>
             </div>
         </section>
-<fly-out name="demo-bottom" position="bottom" class="bg-white dark:bg-slate-800 w-screen shadow-2xl">
+<fly-out name="demo-bottom" position="bottom" class="bg-white dark:bg-slate-800 w-screen shadow-2xl lg:hidden">
     <div class="p-8 max-w-2xl mx-auto">
       <h3 class="text-2xl font-bold text-slate-900 dark:text-slate-100 mb-4 transition-colors">Bottom Fly Out</h3>
       <p class="text-slate-600 dark:text-slate-400 mb-6 transition-colors">
