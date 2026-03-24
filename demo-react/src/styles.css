@@ -8,6 +8,8 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@custom-variant is-sticky (&:is(.is-sticky, .is-sticky *));
+
 :root {
   --sea-ink: #173a40;
   --sea-ink-soft: #416166;
