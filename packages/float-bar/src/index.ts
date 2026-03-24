@@ -199,6 +199,13 @@ class FloatBar extends HTMLElement {
       this.calculateTotalOffset();
       this.updateStickyTop();
       this.lastScroll = this.getScrollPosition();
+
+      // Set initial sticky state
+      const isSticky = this.isSticky();
+      this._isSticky = isSticky;
+      if(isSticky) {
+        this.classList.add('is-sticky');
+      }
     });
 
     this.scrollParent.addEventListener('scroll', this.handleScroll, { passive: true });

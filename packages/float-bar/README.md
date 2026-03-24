@@ -99,6 +99,21 @@ float-bar {
 }
 ```
 
+### Sticky State Class
+
+The float bar automatically adds an `is-sticky` class when it reaches the sticky position (top of viewport or container):
+
+```css
+/* Style the bar when it's sticky */
+float-bar.is-sticky {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+}
+```
+
+This is useful for adding effects like shadows or background changes when the bar becomes sticky.
+
 ## How it Works
 
 The float bar:
