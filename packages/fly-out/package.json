@@ -1,6 +1,6 @@
 {
   "name": "@gnireeg/fly-out",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "description": "Accessible fly-out web component with smooth animations, keyboard support, and background overlay",
   "type": "module",
 

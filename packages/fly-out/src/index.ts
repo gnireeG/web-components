@@ -270,6 +270,11 @@ class FlyOut extends HTMLElement {
    * - Adds keyboard event listeners (ESC to close, Tab for focus trap)
    */
   public open() {
+    // Prevent opening if already open
+    if (this.show) {
+      return;
+    }
+
     const isHidden = window.getComputedStyle(this).display === 'none';
     if(isHidden){
       console.log(`[fly-out] [${this.name}] cannot be opened because this.display is set to 'none'`);
