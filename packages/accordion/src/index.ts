@@ -268,8 +268,9 @@ class AccordionItem extends HTMLElement{
 
     private dispatchStateEvent = () => {
         // Dispatch custom events (both naming conventions for compatibility)
+        // bubbles: false prevents nested accordion events from reaching listeners on ancestor accordion-items
         const eventDetail = {
-            bubbles: true,
+            bubbles: false,
             composed: true,
             detail: { open: this._open }
         };
@@ -338,6 +339,8 @@ class AccordionGroup extends HTMLElement{
 
     private _allowMultiple: boolean = false;
     private static stylesApplied = false;
+    private _observer: MutationObserver | null = null;
+    private _boundItems: Set<AccordionItem> = new Set();
 
     // Property getter/setter for React compatibility
     get allowMultipleOpen(): boolean {
@@ -382,22 +385,50 @@ class AccordionGroup extends HTMLElement{
     }
 
     connectedCallback(){
-        // Only listen to one event to avoid duplicate handling
-        this.addEventListener('accordion-opened', this.handleAccordionOpened);
+        this._observer = new MutationObserver(() => this._syncListeners());
+        this._observer.observe(this, { childList: true, subtree: true });
+        this._syncListeners();
     }
+
     disconnectedCallback(){
-        this.removeEventListener('accordion-opened', this.handleAccordionOpened);
+        this._observer?.disconnect();
+        this._observer = null;
+        this._unbindAll();
+    }
+
+    private _syncListeners() {
+        const currentItems = new Set(
+            Array.from(this.querySelectorAll('accordion-item')).filter(
+                el => el.closest('accordion-group') === this
+            ) as AccordionItem[]
+        );
+        for (const item of this._boundItems) {
+            if (!currentItems.has(item)) {
+                item.removeEventListener('accordion-opened', this.handleAccordionOpened);
+            }
+        }
+        for (const item of currentItems) {
+            if (!this._boundItems.has(item)) {
+                item.addEventListener('accordion-opened', this.handleAccordionOpened);
+            }
+        }
+        this._boundItems = currentItems;
+    }
+
+    private _unbindAll() {
+        for (const item of this._boundItems) {
+            item.removeEventListener('accordion-opened', this.handleAccordionOpened);
+        }
+        this._boundItems.clear();
     }
 
     private handleAccordionOpened = (e: Event) =>{
         if(this._allowMultiple) return;
-        const childAccordions = this.querySelectorAll('accordion-item');
-        childAccordions.forEach( acc => {
-            const accordion = acc as AccordionItem;
+        this._boundItems.forEach(accordion => {
             if(e.target !== accordion){
                 if(accordion.open) accordion.close();
             }
-        })
+        });
     }
 
 }
