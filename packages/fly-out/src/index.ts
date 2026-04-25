@@ -22,9 +22,12 @@ if (typeof window !== 'undefined' && typeof HTMLElement !== 'undefined') {
  * @attr {boolean} [disable-click-outside] - Prevents closing when clicking outside the fly-out
  * @attr {boolean} [disable-background] - Disables the background overlay when fly-out is open
  *
- * @fires fly-out-opened - Dispatched when the fly-out opens. Detail: { name: string }
- * @fires fly-out-closed - Dispatched when the fly-out closes. Detail: { name: string }
- * @fires fly-out-state-changed - Dispatched when open/close state changes. Detail: { name: string, open: boolean }
+ * @fires fly-out-opened - Dispatched when the fly-out opens. Detail: { name: string } - Vanilla JS convention
+ * @fires FlyOutOpened - Same as fly-out-opened, for React compatibility
+ * @fires fly-out-closed - Dispatched when the fly-out closes. Detail: { name: string } - Vanilla JS convention
+ * @fires FlyOutClosed - Same as fly-out-closed, for React compatibility
+ * @fires fly-out-state-changed - Dispatched on document when open/close state changes. Detail: { name: string, open: boolean }
+ * @fires FlyOutStateChanged - Same as fly-out-state-changed, dispatched on element for React compatibility
  *
  * @example
  * ```html
@@ -304,13 +307,9 @@ class FlyOut extends HTMLElement {
     });
 
     this.notifyTriggers();
-    this.dispatchEvent(
-      new CustomEvent("fly-out-opened", {
-        bubbles: true,
-        composed: true,
-        detail: { name: this.name },
-      }),
-    );
+    const openedDetail = { bubbles: true, composed: true, detail: { name: this.name } };
+    this.dispatchEvent(new CustomEvent("fly-out-opened", openedDetail));
+    this.dispatchEvent(new CustomEvent("FlyOutOpened", openedDetail));
   }
 
   /**
@@ -349,21 +348,15 @@ class FlyOut extends HTMLElement {
     }, 300);
 
     this.notifyTriggers();
-    this.dispatchEvent(
-      new CustomEvent("fly-out-closed", {
-        bubbles: true,
-        composed: true,
-        detail: { name: this.name },
-      }),
-    );
+    const closedDetail = { bubbles: true, composed: true, detail: { name: this.name } };
+    this.dispatchEvent(new CustomEvent("fly-out-closed", closedDetail));
+    this.dispatchEvent(new CustomEvent("FlyOutClosed", closedDetail));
   }
 
   private notifyTriggers() {
-    document.dispatchEvent(
-      new CustomEvent("fly-out-state-changed", {
-        detail: { name: this.name, open: this.show },
-      }),
-    );
+    const stateDetail = { detail: { name: this.name, open: this.show } };
+    document.dispatchEvent(new CustomEvent("fly-out-state-changed", stateDetail));
+    this.dispatchEvent(new CustomEvent("FlyOutStateChanged", { ...stateDetail, bubbles: true, composed: true }));
   }
 
   /**
